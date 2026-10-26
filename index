@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>婚禮籌備手帖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&family=Special+Elite&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3ECDF;        /* 米色紙 */
+    --paper-deep:#E8DCC6;
+    --card:#FBF7EF;
+    --ink:#3A2E28;          /* 墨色 */
+    --ink-soft:#73635A;
+    --rust:#9A4F32;         /* 鏽紅：主色 */
+    --rust-deep:#7A3B24;
+    --olive:#6E7448;        /* 橄欖綠 */
+    --mustard:#C49A3C;      /* 芥末黃 */
+    --line:#D8C9AE;
+    --red:#A8402F;
+    --done:#A99C8A;
+    --overdue:#F2D9CF;
+    --soon:#F3E6C4;
+    --donebg:#ECE6D9;
+  }
+  *{box-sizing:border-box;}
+  html{font-size:16px;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Noto Serif TC','Songti TC','PMingLiU',serif;
+    letter-spacing:.03em; line-height:1.85; -webkit-font-smoothing:antialiased;
+  }
+  /* 紙張顆粒感 */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.35; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .3 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  body > *{position:relative; z-index:1;}
+  h1,h2,h3{font-weight:700; margin:0; color:var(--ink);}
+  .type{font-family:'Special Elite','Courier New',monospace; letter-spacing:.06em;}
+  .wrap{max-width:1240px; margin:0 auto; padding:0 24px;}
+  @media (max-width:480px){ .wrap{padding:0 16px;} }
+  button{font-family:inherit; cursor:pointer;}
+  input,textarea{font-family:inherit; color:var(--ink);}
+
+  /* ---------- header ---------- */
+  header{padding:48px 0 40px; border-bottom:1px solid var(--line);}
+  .header-grid{display:grid; grid-template-columns:1fr auto; gap:36px; align-items:center;}
+  @media (max-width:720px){ .header-grid{grid-template-columns:1fr;} .photo-wrap{order:-1; justify-self:center;} }
+  .eyebrow{font-size:.82rem; color:var(--rust); letter-spacing:.28em; display:flex; align-items:center; gap:12px;}
+  .eyebrow::after{content:""; flex:0 0 60px; height:1px; background:var(--rust); opacity:.6;}
+  header h1{font-size:clamp(1.7rem,4.4vw,2.6rem); margin-top:14px; line-height:1.45; letter-spacing:.08em;}
+  header h1 .amp{font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; color:var(--rust); padding:0 .25em;}
+  .en-names{font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.25rem; color:var(--ink-soft); margin-top:4px;}
+  .meta-line{margin-top:18px; display:flex; flex-wrap:wrap; gap:8px 22px; font-size:.9rem; color:var(--ink-soft);}
+  .meta-line span{border-bottom:1px dashed var(--line); padding-bottom:2px;}
+
+  .count-ticket{
+    margin-top:26px; display:inline-flex; align-items:stretch; background:var(--card);
+    border:1px solid var(--line); box-shadow:2px 3px 0 var(--paper-deep);
+  }
+  .count-ticket .stub{padding:10px 16px; border-right:2px dashed var(--line); font-size:.74rem; color:var(--ink-soft); writing-mode:vertical-rl; letter-spacing:.3em;}
+  .count-ticket .main{padding:10px 22px; display:flex; align-items:baseline; gap:10px;}
+  .count-num{font-family:'Special Elite',monospace; font-size:2.6rem; color:var(--rust-deep); line-height:1;}
+  .count-label{font-size:.86rem; color:var(--ink-soft);}
+
+  .progress-row{margin-top:24px; max-width:520px;}
+  .progress-label{display:flex; justify-content:space-between; font-size:.8rem; color:var(--ink-soft); margin-bottom:6px;}
+  .progress-track{height:8px; background:var(--paper-deep); border:1px solid var(--line);}
+  .progress-fill{height:100%; background:repeating-linear-gradient(45deg,var(--olive) 0 6px,#7E8556 6px 12px); transition:width .4s ease;}
+
+  /* 底片相框 */
+  .photo-wrap{position:relative; width:220px;}
+  .photo-frame{
+    background:#FDFAF3; padding:12px 12px 44px; transform:rotate(-2.5deg);
+    box-shadow:0 10px 24px rgba(58,46,40,.18), 0 1px 0 var(--line);
+  }
+  .photo-frame::before{
+    content:""; position:absolute; top:-12px; left:50%; width:84px; height:22px; transform:translateX(-50%) rotate(3deg);
+    background:rgba(196,154,60,.55); box-shadow:0 1px 2px rgba(0,0,0,.08);
+  }
+  .photo-frame img{display:block; width:100%; height:auto; filter:sepia(.28) saturate(.85) contrast(.96);}
+  .photo-placeholder{
+    aspect-ratio:4/5; border:1px dashed var(--line); background:var(--paper);
+    display:flex; align-items:center; justify-content:center; text-align:center; font-size:.8rem; color:var(--ink-soft); padding:12px;
+  }
+  .photo-caption{position:absolute; left:0; right:0; bottom:12px; text-align:center; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:var(--ink-soft);}
+  .postmark{position:absolute; right:-26px; bottom:-18px; width:96px; height:96px; transform:rotate(-14deg); opacity:.75;}
+
+  /* ---------- tabs ---------- */
+  .tabnav-shell{position:sticky; top:0; z-index:30; background:rgba(243,236,223,.96); backdrop-filter:blur(4px); padding-top:16px; border-bottom:1px solid var(--ink);}
+  .tabnav{display:flex; gap:6px; max-width:1240px; margin:0 auto; padding:0 24px; overflow-x:auto;}
+  .tab-btn{
+    background:var(--paper-deep); border:1px solid var(--line); border-bottom:none; border-radius:6px 6px 0 0;
+    padding:10px 18px 9px; font-size:.88rem; color:var(--ink-soft); white-space:nowrap; letter-spacing:.06em;
+  }
+  .tab-btn .no{font-family:'Special Elite',monospace; color:var(--rust); margin-right:6px;}
+  .tab-btn.active{background:var(--card); color:var(--ink); font-weight:700; border-color:var(--ink); position:relative; top:1px;}
+
+  .sync-bar{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 0; font-size:.78rem; color:var(--ink-soft);}
+  .sync-bar.error{color:var(--red);}
+  #refreshBtn{border:1px solid var(--ink-soft); background:none; padding:4px 14px; font-size:.76rem; color:var(--ink-soft);}
+  #refreshBtn:hover{border-color:var(--rust); color:var(--rust);}
+
+  .panel{display:none; padding:24px 0 60px;}
+  .panel.active{display:block;}
+  .section-head{margin-bottom:26px;}
+  .section-head .chapter{font-family:'Special Elite',monospace; font-size:.8rem; color:var(--rust); letter-spacing:.2em;}
+  .section-head h2{font-size:1.45rem; letter-spacing:.1em; margin-top:4px;}
+  .section-head p{color:var(--ink-soft); margin-top:8px; font-size:.9rem; max-width:760px;}
+
+  /* ---------- checklist ---------- */
+  .checklist-legend{display:flex; gap:16px; flex-wrap:wrap; font-size:.78rem; color:var(--ink-soft); margin-bottom:16px;}
+  .legend-dot{display:inline-block; width:12px; height:12px; margin-right:6px; vertical-align:middle; border:1px solid var(--line);}
+  .phase-block{margin-bottom:28px; background:var(--card); border:1px solid var(--line); box-shadow:3px 3px 0 var(--paper-deep);}
+  .phase-head{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:13px 20px; border-bottom:1px solid var(--line); flex-wrap:wrap;}
+  .phase-title{font-weight:700; font-size:.98rem; letter-spacing:.06em;}
+  .phase-title::before{content:"✎ "; color:var(--rust); font-weight:400;}
+  .phase-due{font-weight:400; font-size:.78rem; color:var(--ink-soft);}
+  .phase-count{font-family:'Special Elite',monospace; font-size:.82rem; color:var(--olive);}
+  .task-row{display:flex; align-items:center; gap:10px; padding:10px 20px; border-top:1px dashed var(--paper-deep); flex-wrap:wrap;}
+  .phase-head + .task-row{border-top:none;}
+  .task-row input[type="checkbox"]{width:18px; height:18px; accent-color:var(--olive); flex:none; cursor:pointer;}
+  .task-category{flex:0 0 90px; width:90px; font-size:.76rem; padding:3px 8px; border:1px solid var(--rust); background:none; color:var(--rust); text-align:center;}
+  .task-text{flex:1 1 220px; min-width:140px; font-size:.92rem; border:none; background:none; padding:4px 2px;}
+  .task-text:focus,.task-category:focus{background:var(--paper); outline:none;}
+  .task-row.done .task-text{color:var(--ink-soft); text-decoration:line-through; text-decoration-color:var(--done);}
+  .status-overdue{background:var(--overdue);}
+  .status-soon{background:var(--soon);}
+  .status-done{background:var(--donebg);}
+  .task-meta-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:2px 20px 10px 48px;}
+  .task-desc-inline{font-size:.8rem; font-style:italic; color:var(--ink-soft); cursor:pointer; flex:1 1 auto; min-width:120px;}
+  .task-desc-inline:hover{color:var(--rust);}
+  .task-meta-row input{flex:1 1 200px; min-width:160px; font-size:.8rem; padding:5px 8px; border:1px solid var(--line); background:var(--card);}
+  a.task-link-open{font-size:.78rem; color:var(--card); background:var(--olive); padding:3px 12px; text-decoration:none; white-space:nowrap;}
+  a.task-link-open:hover{background:var(--rust);}
+  .task-link-edit-toggle{font-size:.74rem; color:var(--ink-soft); background:none; border:1px dashed var(--line); padding:3px 10px; white-space:nowrap;}
+  .task-link-edit-toggle:hover{border-color:var(--rust); color:var(--rust);}
+  .task-del,.itin-del,.vendor-del{background:none; border:none; color:var(--ink-soft); font-size:.78rem; text-decoration:underline; white-space:nowrap;}
+  .add-task-row{display:flex; gap:8px; padding:12px 20px; border-top:1px dashed var(--line); flex-wrap:wrap;}
+  .add-task-row input{flex:1; min-width:120px; padding:7px 10px; border:1px solid var(--line); background:var(--paper); font-size:.85rem;}
+  .btn-ink{padding:8px 18px; background:var(--ink); color:var(--paper); border:none; font-size:.84rem; letter-spacing:.08em;}
+  .btn-ink:hover{background:var(--rust);}
+
+  /* ---------- tables ---------- */
+  .table-wrap{background:var(--card); border:1px solid var(--line); box-shadow:3px 3px 0 var(--paper-deep); overflow-x:auto;}
+  table.sheet{width:100%; border-collapse:collapse; table-layout:fixed;}
+  table.sheet th{text-align:left; font-size:.76rem; color:var(--ink-soft); font-weight:500; padding:12px 10px; border-bottom:1px solid var(--ink); letter-spacing:.08em;}
+  table.sheet td{padding:6px 8px; border-top:1px dashed var(--line); vertical-align:top;}
+  .cell{width:100%; min-height:1.6em; padding:6px; font-size:.85rem; white-space:pre-wrap; word-break:break-word; outline:none;}
+  .cell:focus{background:var(--paper);}
+  .cell.empty::before{content:attr(data-placeholder); color:var(--ink-soft); opacity:.55;}
+  .cell.muted-value{color:var(--ink-soft); opacity:.5;}
+  .itin-time-cell{font-family:'Special Elite',monospace; font-size:.95rem; color:var(--rust); text-align:center;}
+  .itin-process-cell{font-weight:700;}
+  .add-row{padding:14px 20px; border-top:1px dashed var(--line);}
+  .seed-box{padding:28px 20px; text-align:center; color:var(--ink-soft); font-size:.88rem;}
+  .seed-box button{margin-top:12px;}
+  @media (max-width:900px){ .table-wrap table{min-width:1000px;} }
+
+  .itin-export-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:16px;}
+  .itin-export-row button{padding:7px 16px; border:1px solid var(--ink); background:none; color:var(--ink); font-size:.82rem;}
+  .itin-export-row button:hover{background:var(--ink); color:var(--paper);}
+  .itin-export-updated{font-size:.76rem; color:var(--ink-soft);}
+
+  .props-checklist{border:1px dashed var(--rust); background:var(--card); padding:18px 22px; margin-top:26px;}
+  .props-checklist-head{font-weight:700; letter-spacing:.08em;}
+  .props-checklist-sub{font-size:.78rem; color:var(--ink-soft); margin:2px 0 14px;}
+  #propsList{display:flex; flex-wrap:wrap; gap:8px 10px;}
+  .props-item{display:flex; align-items:center; gap:6px; background:var(--paper); border:1px solid var(--line); padding:4px 12px; font-size:.85rem; cursor:pointer;}
+  .props-item input{width:15px; height:15px; accent-color:var(--olive);}
+  .props-item.done span{color:var(--ink-soft); text-decoration:line-through;}
+
+  /* ---------- payments ---------- */
+  .payments-gate{background:var(--card); border:1px solid var(--line); box-shadow:3px 3px 0 var(--paper-deep); padding:40px 30px; text-align:center; max-width:440px; margin:0 auto;}
+  .payments-gate-text{color:var(--ink-soft); font-size:.9rem; margin-bottom:18px;}
+  .payments-gate-row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+  .payments-gate-row input{padding:9px 12px; border:1px solid var(--line); background:var(--paper); font-size:.9rem; width:180px;}
+  .payments-gate-err{color:var(--red); font-size:.8rem; margin-top:12px; display:none;}
+  .payments-content{display:none;}
+  .payments-content.open{display:block;}
+  .payments-summary{background:var(--card); border:1px solid var(--line); padding:18px 22px; margin-bottom:18px; display:flex; flex-wrap:wrap; gap:18px; align-items:center;}
+  .ps-label{font-size:.74rem; color:var(--ink-soft);}
+  .ps-value{font-family:'Special Elite',monospace; font-size:1.4rem; color:var(--rust-deep);}
+  .ps-value.small{font-size:1.05rem; color:var(--ink);}
+  .payments-progress-track{height:8px; background:var(--paper-deep); border:1px solid var(--line); margin-top:6px;}
+  .payments-progress-fill{height:100%; background:var(--mustard); transition:width .3s ease;}
+  .payment-card{background:var(--card); border:1px solid var(--line); padding:14px 18px; margin-bottom:10px; display:grid; grid-template-columns:24px 1fr auto; gap:10px 16px; align-items:start;}
+  .payment-card.flagged{border-color:var(--red);}
+  .payment-card.confirmed{background:var(--donebg);}
+  .payment-card input[type="checkbox"]{width:18px; height:18px; margin-top:3px; accent-color:var(--olive);}
+  .payment-name{font-weight:700;}
+  .payment-role,.payment-contact{font-size:.78rem; color:var(--ink-soft);}
+  .payment-note{font-size:.76rem; color:var(--rust); border:1px solid var(--rust); display:inline-block; padding:1px 8px; margin-top:4px;}
+  .payment-amount-block{text-align:right; min-width:110px;}
+  .payment-amount{font-family:'Special Elite',monospace; font-size:1.05rem; color:var(--rust-deep); white-space:nowrap;}
+  .payment-badge{display:inline-block; font-size:.68rem; padding:1px 8px; margin-top:5px; margin-left:4px; border:1px solid currentColor;}
+  .payment-badge.cash{color:var(--olive);} .payment-badge.card{color:var(--mustard);}
+  .payment-badge.pending{color:var(--red);} .payment-badge.after{color:var(--ink-soft);}
+  @media (max-width:560px){ .payment-card{grid-template-columns:20px 1fr;} .payment-amount-block{grid-column:2/3; text-align:left;} }
+
+  .save-note{font-size:.78rem; color:var(--ink-soft); margin-top:16px;}
+  footer{padding:36px 0 46px; text-align:center; font-size:.78rem; color:var(--ink-soft); letter-spacing:.12em;}
+  footer .orn{display:block; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.2rem; color:var(--rust); margin-bottom:4px;}
+
+  .print-only{display:none;}
+  @media print{
+    body::before, header, .tabnav-shell, .sync-bar, .section-head, .itin-export-row,
+    .props-checklist, .add-row, .save-note, footer, .itin-del, .itin-del-col,
+    .panel:not(#panel-itinerary){display:none !important;}
+    #panel-itinerary{display:block !important; padding:0;}
+    .print-only{display:block;}
+    body{background:#fff;}
+    .table-wrap{box-shadow:none;}
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-grid">
+    <div>
+      <div class="eyebrow type">JUST.IN WEDDING · NOTEBOOK</div>
+      <h1><span id="hGroom">新郎</span><span class="amp">&amp;</span><span id="hBride">新娘</span></h1>
+      <div class="en-names" id="hEnNames"></div>
+      <div class="meta-line">
+        <span>日期　<span class="type" id="hDate"></span></span>
+        <span>地點　<span id="hVenue"></span></span>
+      </div>
+      <div class="count-ticket">
+        <div class="stub type">ADMIT TWO</div>
+        <div class="main">
+          <span class="count-label">還有</span>
+          <span class="count-num" id="countdownNum">—</span>
+          <span class="count-label" id="countdownLabel">天，就是我們的日子</span>
+        </div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label"><span>籌備進度</span><span id="progressPct" class="type">0%</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+      </div>
+    </div>
+    <div class="photo-wrap">
+      <div class="photo-frame">
+        <div id="photoSlot"><div class="photo-placeholder">在程式設定區<br>填入 photoUrl<br>這裡就會出現婚紗照</div></div>
+        <div class="photo-caption" id="photoCaption"></div>
+      </div>
+      <svg class="postmark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="44" fill="none" stroke="#9A4F32" stroke-width="1.6"/>
+        <circle cx="50" cy="50" r="34" fill="none" stroke="#9A4F32" stroke-width="1"/>
+        <text x="50" y="47" text-anchor="middle" font-family="Special Elite, monospace" font-size="9" fill="#9A4F32" letter-spacing="1">WEDDING</text>
+        <text x="50" y="61" text-anchor="middle" font-family="Special Elite, monospace" font-size="11" fill="#9A4F32" id="postmarkYear">2027</text>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<div class="tabnav-shell">
+  <nav class="tabnav">
+    <button class="tab-btn active" data-tab="checklist"><span class="no">01</span>重要事項檢核表</button>
+    <button class="tab-btn" data-tab="itinerary"><span class="no">02</span>婚禮流程</button>
+    <button class="tab-btn" data-tab="vendors"><span class="no">03</span>廠商聯繫清單</button>
+    <button class="tab-btn" data-tab="payments"><span class="no">04</span>廠商尾款</button>
+  </nav>
+</div>
+
+<div class="wrap">
+  <div class="sync-bar">
+    <span id="syncStatus">正在連線同步資料…</span>
+    <button id="refreshBtn">↻ 重新整理</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="panel active" id="panel-checklist">
+    <div class="section-head">
+      <div class="chapter">CHAPTER 01</div>
+      <h2>重要事項檢核表</h2>
+      <p>依籌備時程分階段列出，完成後直接勾選，也可以自行新增項目。新人與顧問看到的都是同一份最新進度。</p>
+    </div>
+    <div class="checklist-legend">
+      <span><span class="legend-dot" style="background:var(--overdue);"></span>已逾期</span>
+      <span><span class="legend-dot" style="background:var(--soon);"></span>14 天內到期</span>
+      <span><span class="legend-dot" style="background:var(--donebg);"></span>已完成</span>
+    </div>
+    <div id="checklistContainer"></div>
+    <p class="save-note">＊勾選與編輯會即時同步到 Google 試算表（約每 20 秒自動更新，也可以手動點「重新整理」）。</p>
+  </section>
+
+  <section class="panel" id="panel-itinerary">
+    <div class="section-head">
+      <div class="chapter">CHAPTER 02</div>
+      <h2>婚禮當天流程</h2>
+      <p>以下為草案流程，可直接點擊修改時間、內容、音樂、投影幕、道具與備註，實際時間依場地與現場狀況於婚禮前確認定案。</p>
+    </div>
+    <div class="print-only">
+      <h2 style="margin-bottom:6px;" id="printTitle"></h2>
+      <p style="font-size:.85rem; color:#555; margin-bottom:16px;"><span id="printVenue"></span>　|　資料更新時間：<span id="printUpdatedTime"></span></p>
+    </div>
+    <div class="table-wrap">
+      <table class="sheet">
+        <thead>
+          <tr>
+            <th style="width:7%;">開始</th>
+            <th style="width:7%;">結束</th>
+            <th style="width:13%;">大綱</th>
+            <th style="width:19%;">概要內容</th>
+            <th style="width:13%;">音樂</th>
+            <th style="width:12%;">投影幕</th>
+            <th style="width:12%;">道具</th>
+            <th style="width:13%;">備註</th>
+            <th style="width:56px;" class="itin-del-col"></th>
+          </tr>
+        </thead>
+        <tbody id="itinContainer"></tbody>
+      </table>
+    </div>
+    <div class="add-row"><button class="btn-ink" id="addItinBtn">＋ 新增流程項目</button></div>
+    <div class="itin-export-row">
+      <button id="exportExcelBtn">⬇ 下載 Excel</button>
+      <button id="exportPdfBtn">⬇ 下載 PDF</button>
+      <button id="replaceItinBtn">↺ 改用預設流程草案</button>
+      <span class="itin-export-updated" id="itinUpdatedLabel"></span>
+    </div>
+    <p class="save-note">＊此流程為草案，建議於婚禮前 2 週與總召進行最終確認會議後定案。</p>
+    <div class="props-checklist" id="propsChecklist">
+      <div class="props-checklist-head">道具核對清單</div>
+      <p class="props-checklist-sub">自動整理自流程表「道具」欄出現過的所有物品，準備好就打勾。</p>
+      <div id="propsList"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-vendors">
+    <div class="section-head">
+      <div class="chapter">CHAPTER 03</div>
+      <h2>廠商（工作人員）聯繫清單</h2>
+      <p>點擊欄位即可直接編輯，建議婚禮前 1 週補齊所有廠商的到場時間與聯絡窗口。</p>
+    </div>
+    <div class="table-wrap">
+      <table class="sheet">
+        <thead>
+          <tr>
+            <th style="width:8%;">類別</th>
+            <th style="width:13%;">廠商／單位</th>
+            <th style="width:9%;">聯絡人</th>
+            <th style="width:10%;">電話</th>
+            <th style="width:9%;">LINE</th>
+            <th style="width:9%;">到場時間</th>
+            <th style="width:6%;">工作人員</th>
+            <th style="width:5%;">葷食</th>
+            <th style="width:5%;">素食</th>
+            <th style="width:8%;">飲食禁忌</th>
+            <th style="width:12%;">備註</th>
+            <th style="width:56px;"></th>
+          </tr>
+        </thead>
+        <tbody id="vendorTbody"></tbody>
+      </table>
+    </div>
+    <div class="add-row"><button class="btn-ink" id="addVendorBtn">＋ 新增廠商</button></div>
+    <p class="save-note">＊聯絡資訊會即時同步到 Google 試算表，建議仍定期在試算表裡備份一份。</p>
+  </section>
+
+  <section class="panel" id="panel-payments">
+    <div class="section-head">
+      <div class="chapter">CHAPTER 04</div>
+      <h2>廠商尾款確認</h2>
+      <p>僅供新人與顧問確認婚禮當天現場需支付的尾款，請輸入通關密碼查看。</p>
+    </div>
+    <div class="payments-gate" id="paymentsGate">
+      <p class="payments-gate-text">此頁面內容涉及金額資訊，請輸入通關密碼。</p>
+      <div class="payments-gate-row">
+        <input type="password" id="paymentsPasscode" placeholder="通關密碼">
+        <button class="btn-ink" id="paymentsUnlock">解鎖查看</button>
+      </div>
+      <p class="payments-gate-err" id="paymentsErr">密碼不正確，請再試一次，或向顧問確認密碼。</p>
+    </div>
+    <div class="payments-content" id="paymentsContent">
+      <div class="payments-summary">
+        <div><div class="ps-label">尾款總金額</div><div class="ps-value" id="paymentsTotalAmount">NT$ 0</div></div>
+        <div><div class="ps-label">已確認</div><div class="ps-value small"><span id="paymentsCheckedCount">0</span> / <span id="paymentsTotalCount">0</span> 項</div></div>
+        <div style="flex:1; min-width:200px;"><div class="ps-label">確認進度</div><div class="payments-progress-track"><div class="payments-progress-fill" id="paymentsProgressFill" style="width:0%;"></div></div></div>
+      </div>
+      <div id="paymentsCardList"></div>
+      <p class="save-note">＊打勾代表已與該廠商確認尾款金額與付款方式，狀態會即時同步到 Google 試算表。</p>
+    </div>
+  </section>
+
+</main>
+
+<footer><span class="orn">— fin. —</span>Just.in Wedding 佳時婚禮顧問工作室</footer>
+
+<script>
+/* =========================================================
+   ★ 新人資料設定區：換一組新人時，只需要改這裡 ★
+   ========================================================= */
+var CONFIG = {
+  groom: '新郎',               // ← 請填新郎姓名
+  bride: 'Vivian',
+  groomEn: 'Groom',            // 照片下方與英文副標用，可留空
+  brideEn: 'Vivian',
+  date: '2027-02-14',          // 婚禮日期，格式 YYYY-MM-DD（檢核表截止日會自動依此回推）
+  venue: '婚宴場地',           // ← 請填場地名稱
+  appsScriptUrl: 'PASTE_YOUR_APPS_SCRIPT_URL_HERE',   // 貼上 Apps Script 部署後 /exec 結尾的網址
+  photoUrl: '',                // 婚紗照網址或 base64，留空則顯示預留框
+  paymentsPasscode: '0000'     // 尾款頁通關密碼（僅為輕量保護）
+};
+
+/* 試算表「Itinerary」分頁是空的時候，可以一鍵帶入的預設流程草案 */
+var DEFAULT_ITINERARY = [
+  {outline:'賓客入場・自由接待', summary:'賓客簽到、領取座位卡，自由拍照與交流', music:'輕柔背景音樂', screen:'新人照片輪播', props:'簽名簿、座位卡', note:'若決定新人在接待處迎賓，新人此時已在接待處'},
+  {outline:'主持人開場＋新人進場', summary:'主持人開場致詞，接著新人進場', music:'進場音樂', screen:'', props:'', note:'待定：A. 新人在接待處迎賓，主持人開場後請新人上台；B. 主持人開場後 cue 新人正式進場（需確認場地動線）'},
+  {outline:'交換戒指儀式', summary:'新人交換戒指', music:'儀式音樂', screen:'', props:'戒指、戒枕', note:'考慮中，待新人確認'},
+  {outline:'小遊戲時間', summary:'主持人帶領賓客互動小遊戲', music:'', screen:'遊戲畫面', props:'遊戲道具、小禮物', note:'考慮中，遊戲內容與獎品待定'},
+  {outline:'逐桌敬酒・聊天', summary:'新人逐桌敬酒，與賓客聊天合照', music:'背景音樂', screen:'新人照片輪播', props:'', note:''},
+  {outline:'甜點時刻・收尾致詞', summary:'甜點上桌，主持人收尾，新人簡單致詞感謝賓客蒞臨', music:'', screen:'', props:'麥克風', note:''},
+  {outline:'送客', summary:'新人於門口送客', music:'送客音樂', screen:'', props:'送客小物', note:''}
+];
+
+(function(){
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function ymd(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function slashDate(s){ return s.replace(/-/g,'/'); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  var WEDDING_DATE = new Date(CONFIG.date + 'T00:00:00');
+  var namesLine = CONFIG.groom + ' & ' + CONFIG.bride;
+
+  // ---------- 套用新人資料 ----------
+  document.title = slashDate(CONFIG.date) + ' ' + namesLine + '・婚禮籌備手帖';
+  document.getElementById('hGroom').textContent = CONFIG.groom;
+  document.getElementById('hBride').textContent = CONFIG.bride;
+  document.getElementById('hEnNames').textContent = (CONFIG.groomEn && CONFIG.brideEn) ? (CONFIG.groomEn + ' & ' + CONFIG.brideEn) : '';
+  document.getElementById('hDate').textContent = slashDate(CONFIG.date);
+  document.getElementById('hVenue').textContent = CONFIG.venue;
+  document.getElementById('postmarkYear').textContent = CONFIG.date.slice(0,4);
+  document.getElementById('photoCaption').textContent = (CONFIG.groomEn && CONFIG.brideEn) ? (CONFIG.groomEn + ' & ' + CONFIG.brideEn) : '';
+  document.getElementById('printTitle').textContent = slashDate(CONFIG.date) + ' ' + namesLine + ' 婚禮當天流程';
+  document.getElementById('printVenue').textContent = CONFIG.venue;
+  if(CONFIG.photoUrl){
+    var img = document.createElement('img');
+    img.src = CONFIG.photoUrl;
+    img.alt = CONFIG.groom + '與' + CONFIG.bride + '的婚紗照';
+    var slot = document.getElementById('photoSlot');
+    slot.innerHTML = '';
+    slot.appendChild(img);
+  }
+
+  // ---------- tabs ----------
+  var tabs = document.querySelectorAll('.tab-btn');
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.toggle('active', t === btn); });
+      document.querySelectorAll('.panel').forEach(function(p){ p.classList.toggle('active', p.id === 'panel-' + btn.dataset.tab); });
+    });
+  });
+
+  // ---------- countdown ----------
+  (function(){
+    var diffDays = Math.ceil((WEDDING_DATE - new Date()) / 864e5);
+    var num = document.getElementById('countdownNum'), lbl = document.getElementById('countdownLabel');
+    if(diffDays > 0){ num.textContent = diffDays; }
+    else if(diffDays === 0){ num.textContent = '0'; lbl.textContent = '天，就是今天'; }
+    else { num.textContent = '♡'; lbl.textContent = '婚禮圓滿完成'; }
+  })();
+
+  // ===== Google Apps Script 連線 =====
+  var APPS_SCRIPT_URL = CONFIG.appsScriptUrl;
+  var isConfigured = !!APPS_SCRIPT_URL && APPS_SCRIPT_URL.indexOf('PASTE_YOUR') !== 0;
+  var syncStatusEl = document.getElementById('syncStatus');
+  var syncBarEl = document.querySelector('.sync-bar');
+  var state = { Checklist: [], Itinerary: [], Vendors: [], Payments: [], Props: [] };
+  var loadedOnce = false;
+
+  function setSyncStatus(text, isError){ syncStatusEl.textContent = text; syncBarEl.classList.toggle('error', !!isError); }
+  function toBool(v){ return v === true || v === 'TRUE' || v === 'true' || v === 1 || v === '1'; }
+  function toNum(v){ var n = parseFloat(v); return isNaN(n) ? 0 : n; }
+  function toStr(v){ return (v === undefined || v === null) ? '' : String(v); }
+  function newId(prefix){ return prefix + '-' + Date.now() + '-' + Math.random().toString(36).slice(2,6); }
+
+  var lastSyncTime = null;
+  function updateExportLabels(){
+    document.getElementById('itinUpdatedLabel').textContent = lastSyncTime ? ('資料更新時間：' + lastSyncTime) : '';
+    document.getElementById('printUpdatedTime').textContent = lastSyncTime || '';
+  }
+
+  async function loadAll(silent){
+    if(!isConfigured){
+      setSyncStatus('⚠️ 尚未設定 Google Apps Script 連線，請在程式碼最上方的設定區貼上 appsScriptUrl。', true);
+      renderItin();
+      return;
+    }
+    if(!silent) setSyncStatus('正在讀取最新資料…');
+    try{
+      var res = await fetch(APPS_SCRIPT_URL + '?_=' + Date.now());
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      var data = await res.json();
+      state.Checklist = (data.Checklist || []).map(normalizeChecklistRow);
+      state.Itinerary = (data.Itinerary || []).map(normalizeItinRow);
+      state.Vendors = (data.Vendors || []).map(normalizeVendorRow);
+      state.Payments = (data.Payments || []).map(normalizePaymentRow);
+      state.Props = (data.Props || []).map(normalizePropRow);
+      loadedOnce = true;
+      renderChecklist(); updateProgress();
+      renderItin(); renderPropsChecklist();
+      renderVendors();
+      if(paymentsUnlocked) renderPayments();
+      lastSyncTime = new Date().toLocaleString('zh-TW');
+      updateExportLabels();
+      setSyncStatus('已同步（' + new Date().toLocaleTimeString('zh-TW') + '）');
+    }catch(e){
+      console.error('Sync load error', e);
+      setSyncStatus('⚠️ 讀取失敗，請確認 Apps Script 是否已正確部署，或稍後點「重新整理」再試一次。', true);
+    }
+  }
+
+  async function postAction(payload){
+    if(!isConfigured) return null;
+    try{
+      var res = await fetch(APPS_SCRIPT_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload)});
+      var data = await res.json();
+      if(!data.ok) throw new Error(data.error || 'unknown error');
+      return data;
+    }catch(e){
+      console.error('Sync write error', e);
+      setSyncStatus('⚠️ 這筆變更同步失敗，請檢查網路連線後點「重新整理」確認狀態。', true);
+      return null;
+    }
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', function(){ loadAll(false); });
+  setInterval(function(){
+    var a = document.activeElement;
+    var typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable);
+    if(!typing) loadAll(true);
+  }, 20000);
+
+  function normalizeChecklistRow(r){
+    return {id:toStr(r.id), phase:toStr(r.phase), category:toStr(r.category), text:toStr(r.text), done:toBool(r.done), desc:toStr(r.desc), ref_link:toStr(r.ref_link), file_link:toStr(r.file_link), order:toNum(r.order)};
+  }
+  function pick(r, keys){ for(var i=0;i<keys.length;i++){ if(r[keys[i]] !== undefined) return r[keys[i]]; } return ''; }
+  function normalizeItinRow(r){
+    return {
+      id:toStr(r.id),
+      time:toStr(pick(r,['開始時間','時間','time'])),
+      end_time:toStr(pick(r,['結束時間','end_time'])),
+      outline:toStr(pick(r,['大綱','outline'])),
+      summary:toStr(pick(r,['概要內容','概要說明','summary'])),
+      music:toStr(pick(r,['音樂','music'])),
+      screen:toStr(pick(r,['投影幕','screen'])),
+      props:toStr(pick(r,['道具','props'])),
+      note:toStr(pick(r,['備註','note'])),
+      order:toNum(r.order)
+    };
+  }
+  function normalizeVendorRow(r){
+    return {id:toStr(r.id), category:toStr(r.category), name:toStr(r.name), contact:toStr(r.contact), phone:toStr(r.phone), line:toStr(r.LINE !== undefined ? r.LINE : r.line), arrival:toStr(r.arrival), note:toStr(r.note),
+      staff_count:toStr(r['工作人員人數']), meat_count:toStr(r['葷食']), veg_count:toStr(r['素食']), dietary_restriction:toStr(r['飲食禁忌']), order:toNum(r.order)};
+  }
+
+  // ================= 檢核表：截止日（依婚禮日期自動回推） =================
+  function addMonths(d, m){ var x = new Date(d); x.setMonth(x.getMonth() + m); return x; }
+  function addDays(d, n){ return new Date(d.getTime() + n*864e5); }
+  var PHASE_DEFS = [
+    {names:['婚禮前 3-4 個月（現在）','婚禮前 3-4 個月','婚禮前 3 個月'], due:addMonths(WEDDING_DATE,-3)},
+    {names:['婚禮前 2-3 個月','婚禮前 2 個月'], due:addMonths(WEDDING_DATE,-2)},
+    {names:['婚禮前 1 個月'], due:addMonths(WEDDING_DATE,-1)},
+    {names:['婚禮前 2 週'], due:addDays(WEDDING_DATE,-14)},
+    {names:['婚禮前 1 週'], due:addDays(WEDDING_DATE,-7)},
+    {names:['婚禮當天'], due:WEDDING_DATE}
+  ];
+  function getPhaseDueDate(phase){
+    phase = (phase || '').trim();
+    for(var i=0;i<PHASE_DEFS.length;i++){
+      if(PHASE_DEFS[i].names.indexOf(phase) !== -1) return ymd(PHASE_DEFS[i].due);
+    }
+    // 階段名稱若直接寫日期（例如「2027/02/20 前」），就用那個日期
+    var m = phase.match(/(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})/);
+    if(m) return m[1] + '-' + pad(+m[2]) + '-' + pad(+m[3]);
+    return null;
+  }
+  function formatRelative(dueStr){
+    var today = new Date(); today.setHours(0,0,0,0);
+    var diff = Math.round((new Date(dueStr + 'T00:00:00') - today) / 864e5);
+    if(diff > 0) return diff >= 45 ? ('還有約 ' + Math.round(diff/30) + ' 個月') : ('還有 ' + diff + ' 天');
+    if(diff === 0) return '就是今天';
+    return '已超過 ' + Math.abs(diff) + ' 天';
+  }
+  function taskStatus(item){
+    if(item.done) return 'done';
+    var due = getPhaseDueDate(item.phase);
+    if(!due) return '';
+    var today = ymd(new Date());
+    if(today > due) return 'overdue';
+    if(today >= ymd(addDays(new Date(due + 'T00:00:00'), -14))) return 'soon';
+    return '';
+  }
+
+  function updateProgress(){
+    var total = state.Checklist.length;
+    var done = state.Checklist.filter(function(i){ return i.done; }).length;
+    var pct = total ? Math.round(done/total*100) : 0;
+    document.getElementById('progressPct').textContent = pct + '% (' + done + '/' + total + ')';
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+
+  function groupByPhase(items){
+    var order = [], groups = {};
+    items.slice().sort(function(a,b){ return a.order - b.order; }).forEach(function(it){
+      if(!groups[it.phase]){ groups[it.phase] = []; order.push(it.phase); }
+      groups[it.phase].push(it);
+    });
+    order.forEach(function(p){
+      groups[p].sort(function(a,b){
+        var d = (a.done?1:0) - (b.done?1:0);
+        return d !== 0 ? d : (a.category||'').localeCompare(b.category||'', 'zh-Hant');
+      });
+    });
+    var list = order.map(function(p){ return {phase:p, items:groups[p]}; });
+    list.sort(function(a,b){
+      var ad = a.items.length && a.items.every(function(i){ return i.done; });
+      var bd = b.items.length && b.items.every(function(i){ return i.done; });
+      return ad === bd ? 0 : (ad ? 1 : -1);
+    });
+    return list;
+  }
+
+  var linkEditorOpen = {}, descEditorOpenMap = {};
+
+  function renderChecklist(){
+    var container = document.getElementById('checklistContainer');
+    container.innerHTML = '';
+    groupByPhase(state.Checklist).forEach(function(group){
+      var block = document.createElement('div');
+      block.className = 'phase-block';
+      var head = document.createElement('div');
+      head.className = 'phase-head';
+      var doneCount = group.items.filter(function(i){ return i.done; }).length;
+      var due = getPhaseDueDate(group.phase);
+      var dueLabel = due ? '　<span class="phase-due">' + slashDate(due) + '　' + formatRelative(due) + '</span>' : '';
+      head.innerHTML = '<span class="phase-title">' + esc(group.phase) + dueLabel + '</span><span class="phase-count">' + doneCount + ' / ' + group.items.length + '</span>';
+      block.appendChild(head);
+
+      group.items.forEach(function(item){
+        var status = taskStatus(item);
+        var row = document.createElement('div');
+        row.className = 'task-row' + (item.done ? ' done' : '') + (status ? ' status-' + status : '');
+
+        var cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.checked = item.done;
+        cb.addEventListener('change', function(){
+          item.done = cb.checked; renderChecklist(); updateProgress();
+          postAction({action:'update', sheet:'Checklist', id:item.id, fields:{done: item.done ? 'TRUE' : 'FALSE'}});
+        });
+        var cat = document.createElement('input');
+        cat.type = 'text'; cat.className = 'task-category'; cat.placeholder = '大類'; cat.value = item.category || '';
+        cat.addEventListener('change', function(){
+          item.category = cat.value;
+          postAction({action:'update', sheet:'Checklist', id:item.id, fields:{category:item.category}});
+        });
+        var txt = document.createElement('input');
+        txt.type = 'text'; txt.className = 'task-text'; txt.value = item.text;
+        txt.addEventListener('change', function(){
+          item.text = txt.value;
+          postAction({action:'update', sheet:'Checklist', id:item.id, fields:{text:item.text}});
+        });
+        var del = document.createElement('button');
+        del.className = 'task-del'; del.textContent = '刪除';
+        del.addEventListener('click', function(){
+          state.Checklist = state.Checklist.filter(function(i){ return i.id !== item.id; });
+          renderChecklist(); updateProgress();
+          postAction({action:'delete', sheet:'Checklist', id:item.id});
+        });
+        row.appendChild(cb); row.appendChild(cat); row.appendChild(txt); row.appendChild(del);
+
+        var meta = document.createElement('div');
+        meta.className = 'task-meta-row' + (status ? ' status-' + status : '');
+        var descOpen = !!descEditorOpenMap[item.id];
+
+        if(item.desc && !descOpen){
+          var d = document.createElement('span');
+          d.className = 'task-desc-inline'; d.textContent = item.desc; d.title = '點擊修改說明';
+          d.addEventListener('click', function(){ descEditorOpenMap[item.id] = true; renderChecklist(); });
+          meta.appendChild(d);
+        }else if(descOpen){
+          var di = document.createElement('input');
+          di.type = 'text'; di.placeholder = '為什麼要做這件事？可以補充說明給新人看…'; di.value = item.desc || '';
+          di.addEventListener('blur', function(){
+            item.desc = di.value; delete descEditorOpenMap[item.id];
+            postAction({action:'update', sheet:'Checklist', id:item.id, fields:{desc:item.desc}});
+            renderChecklist();
+          });
+          meta.appendChild(di);
+          setTimeout(function(){ di.focus(); }, 0);
+        }
+
+        if(linkEditorOpen[item.id]){
+          var ri = document.createElement('input');
+          ri.type = 'text'; ri.placeholder = '參考資料連結…'; ri.value = item.ref_link || '';
+          ri.addEventListener('change', function(){
+            item.ref_link = ri.value;
+            postAction({action:'update', sheet:'Checklist', id:item.id, fields:{ref_link:item.ref_link}});
+          });
+          var fi = document.createElement('input');
+          fi.type = 'text'; fi.placeholder = '上傳檔案連結…'; fi.value = item.file_link || '';
+          fi.addEventListener('change', function(){
+            item.file_link = fi.value;
+            postAction({action:'update', sheet:'Checklist', id:item.id, fields:{file_link:item.file_link}});
+          });
+          var doneBtn = document.createElement('button');
+          doneBtn.className = 'task-link-edit-toggle'; doneBtn.textContent = '完成';
+          doneBtn.addEventListener('click', function(){ delete linkEditorOpen[item.id]; renderChecklist(); });
+          meta.appendChild(ri); meta.appendChild(fi); meta.appendChild(doneBtn);
+        }else{
+          [['ref_link','🔗 參考資料'],['file_link','📁 上傳檔案']].forEach(function(pair){
+            var url = (item[pair[0]] || '').trim();
+            if(/^https?:\/\//i.test(url)){
+              var a = document.createElement('a');
+              a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.className = 'task-link-open'; a.textContent = pair[1];
+              meta.appendChild(a);
+            }
+          });
+          var eb = document.createElement('button');
+          eb.className = 'task-link-edit-toggle'; eb.textContent = '✎ 編輯連結';
+          eb.addEventListener('click', function(){ linkEditorOpen[item.id] = true; renderChecklist(); });
+          meta.appendChild(eb);
+        }
+        if(!item.desc && !descOpen){
+          var ab = document.createElement('button');
+          ab.className = 'task-link-edit-toggle'; ab.textContent = '✎ 新增說明';
+          ab.addEventListener('click', function(){ descEditorOpenMap[item.id] = true; renderChecklist(); });
+          meta.appendChild(ab);
+        }
+        block.appendChild(row); block.appendChild(meta);
+      });
+
+      var addRow = document.createElement('div');
+      addRow.className = 'add-task-row';
+      var ac = document.createElement('input');
+      ac.type = 'text'; ac.placeholder = '大類（選填）'; ac.style.maxWidth = '110px';
+      var ai = document.createElement('input');
+      ai.type = 'text'; ai.placeholder = '新增這個階段的項目…';
+      var abtn = document.createElement('button');
+      abtn.className = 'btn-ink'; abtn.textContent = '新增';
+      abtn.addEventListener('click', function(){
+        var val = ai.value.trim();
+        if(!val) return;
+        var maxOrder = state.Checklist.reduce(function(m,i){ return Math.max(m,i.order); }, 0);
+        var it = {id:newId('c'), phase:group.phase, category:ac.value.trim(), text:val, done:false, desc:'', ref_link:'', file_link:'', order:maxOrder+1};
+        state.Checklist.push(it);
+        renderChecklist(); updateProgress();
+        postAction({action:'add', sheet:'Checklist', fields:{id:it.id, phase:it.phase, category:it.category, text:it.text, done:'FALSE', desc:'', ref_link:'', file_link:'', order:it.order}});
+      });
+      ai.addEventListener('keydown', function(e){ if(e.key === 'Enter') abtn.click(); });
+      addRow.appendChild(ac); addRow.appendChild(ai); addRow.appendChild(abtn);
+      block.appendChild(addRow);
+      container.appendChild(block);
+    });
+  }
+
+  // ================= 婚禮流程 =================
+  var ITIN_SHEET_COL = {time:'開始時間', end_time:'結束時間', outline:'大綱', summary:'概要內容', music:'音樂', screen:'投影幕', props:'道具', note:'備註'};
+
+  function makeItinCell(row, field, placeholder){
+    var td = document.createElement('td');
+    var cell = document.createElement('div');
+    cell.className = 'cell'; cell.contentEditable = 'true';
+    cell.textContent = row[field] || '';
+    if(!row[field] && placeholder){ cell.classList.add('empty'); cell.dataset.placeholder = placeholder; }
+    cell.addEventListener('focus', function(){ cell.classList.remove('empty'); });
+    cell.addEventListener('blur', function(){
+      var val = cell.textContent.trim();
+      row[field] = val;
+      if(!val && placeholder) cell.classList.add('empty');
+      var f = {}; f[ITIN_SHEET_COL[field] || field] = val;
+      postAction({action:'update', sheet:'Itinerary', id:row.id, fields:f});
+      if(field === 'props') renderPropsChecklist();
+    });
+    cell.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' && field !== 'summary' && field !== 'note'){ e.preventDefault(); cell.blur(); }
+    });
+    td.appendChild(cell);
+    return td;
+  }
+
+  function itinFields(row){
+    return {id:row.id, '開始時間':row.time, '結束時間':row.end_time, '大綱':row.outline, '概要內容':row.summary, '音樂':row.music, '投影幕':row.screen, '道具':row.props, '備註':row.note, order:row.order};
+  }
+
+  var seeding = false;
+  async function seedDefaultItinerary(){
+    if(seeding) return;
+    seeding = true;
+    var base = state.Itinerary.reduce(function(m,i){ return Math.max(m,i.order); }, 0);
+    var rows = DEFAULT_ITINERARY.map(function(d, idx){
+      return {id:newId('i'), time:'', end_time:'', outline:d.outline, summary:d.summary, music:d.music, screen:d.screen, props:d.props, note:d.note, order:base+idx+1};
+    });
+    rows.forEach(function(r){ state.Itinerary.push(r); });
+    renderItin(); renderPropsChecklist();
+    for(var i=0;i<rows.length;i++){ await postAction({action:'add', sheet:'Itinerary', fields:itinFields(rows[i])}); }
+    seeding = false;
+  }
+
+  document.getElementById('replaceItinBtn').addEventListener('click', async function(){
+    if(isConfigured && !loadedOnce){ alert('資料還在讀取中，請稍候再試。'); return; }
+    if(!confirm('這會刪除目前所有流程項目，改成預設的流程草案（接待 → 開場進場 → 戒指儀式 → 小遊戲 → 敬酒 → 甜點收尾 → 送客）。確定要取代嗎？')) return;
+    var old = state.Itinerary.slice();
+    state.Itinerary = [];
+    renderItin();
+    for(var i=0;i<old.length;i++){ await postAction({action:'delete', sheet:'Itinerary', id:old[i].id}); }
+    await seedDefaultItinerary();
+  });
+
+  function renderItin(){
+    var tbody = document.getElementById('itinContainer');
+    tbody.innerHTML = '';
+    var rows = state.Itinerary.slice().sort(function(a,b){ return a.order - b.order; });
+    if(rows.length === 0){
+      var tr0 = document.createElement('tr');
+      var td0 = document.createElement('td');
+      td0.colSpan = 9;
+      td0.innerHTML = '<div class="seed-box">目前還沒有流程項目。<br>可以一鍵帶入「接待 → 開場進場 → 戒指儀式 → 小遊戲 → 敬酒 → 甜點收尾 → 送客」的草案，再逐項修改。<br></div>';
+      var sb = document.createElement('button');
+      sb.className = 'btn-ink'; sb.textContent = '帶入預設流程草案';
+      sb.disabled = isConfigured && !loadedOnce;
+      sb.addEventListener('click', seedDefaultItinerary);
+      td0.firstChild.appendChild(sb);
+      tr0.appendChild(td0); tbody.appendChild(tr0);
+      return;
+    }
+    rows.forEach(function(row){
+      var tr = document.createElement('tr');
+      var t1 = makeItinCell(row,'time','開始'); t1.firstChild.classList.add('itin-time-cell'); tr.appendChild(t1);
+      var t2 = makeItinCell(row,'end_time','結束'); t2.firstChild.classList.add('itin-time-cell'); tr.appendChild(t2);
+      var t3 = makeItinCell(row,'outline','大綱…'); t3.firstChild.classList.add('itin-process-cell'); tr.appendChild(t3);
+      tr.appendChild(makeItinCell(row,'summary','概要內容…'));
+      tr.appendChild(makeItinCell(row,'music','音樂…'));
+      tr.appendChild(makeItinCell(row,'screen','投影幕…'));
+      tr.appendChild(makeItinCell(row,'props','道具…'));
+      tr.appendChild(makeItinCell(row,'note','備註…'));
+      var dtd = document.createElement('td'); dtd.className = 'itin-del-col';
+      var del = document.createElement('button');
+      del.className = 'itin-del'; del.textContent = '刪除';
+      del.addEventListener('click', function(){
+        state.Itinerary = state.Itinerary.filter(function(i){ return i.id !== row.id; });
+        renderItin(); renderPropsChecklist();
+        postAction({action:'delete', sheet:'Itinerary', id:row.id});
+      });
+      dtd.appendChild(del); tr.appendChild(dtd);
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.getElementById('addItinBtn').addEventListener('click', function(){
+    var maxOrder = state.Itinerary.reduce(function(m,i){ return Math.max(m,i.order); }, 0);
+    var row = {id:newId('i'), time:'', end_time:'', outline:'', summary:'', music:'', screen:'', props:'', note:'', order:maxOrder+1};
+    state.Itinerary.push(row);
+    renderItin(); renderPropsChecklist();
+    postAction({action:'add', sheet:'Itinerary', fields:itinFields(row)});
+  });
+
+  function exportItinExcel(){
+    if(typeof XLSX === 'undefined'){ alert('匯出功能載入失敗，請檢查網路連線後重新整理頁面再試一次。'); return; }
+    var rows = state.Itinerary.slice().sort(function(a,b){ return a.order - b.order; });
+    var aoa = [
+      [slashDate(CONFIG.date) + ' ' + namesLine + '・婚禮當天流程（' + CONFIG.venue + '）'],
+      ['資料更新時間：' + (lastSyncTime || '')], [],
+      ['開始時間','結束時間','大綱','概要內容','音樂','投影幕','道具','備註']
+    ].concat(rows.map(function(r){ return [r.time, r.end_time, r.outline, r.summary, r.music, r.screen, r.props, r.note]; }));
+    var ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws['!cols'] = [{wch:8},{wch:8},{wch:16},{wch:28},{wch:18},{wch:18},{wch:18},{wch:30}];
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, '婚禮流程');
+    XLSX.writeFile(wb, CONFIG.date.slice(5).replace('-','') + '婚禮流程_' + (lastSyncTime || '').replace(/[\/: ]/g,'') + '.xlsx');
+  }
+  document.getElementById('exportExcelBtn').addEventListener('click', exportItinExcel);
+  document.getElementById('exportPdfBtn').addEventListener('click', function(){ window.print(); });
+
+  // ---------- 道具核對清單 ----------
+  function normalizePropRow(r){ return {id:toStr(r.id), name:toStr(r.name), done:toBool(r.done), order:toNum(r.order)}; }
+  function extractPropsList(){
+    var names = [];
+    state.Itinerary.forEach(function(row){
+      (row.props || '').split(/[、,，\/／\n]+/).forEach(function(p){
+        var n = p.trim();
+        if(n && names.indexOf(n) === -1) names.push(n);
+      });
+    });
+    return names;
+  }
+  function findPropByName(name){ return state.Props.find(function(p){ return p.name === name; }); }
+  var propsAddRequested = {};
+
+  function renderPropsChecklist(){
+    var names = extractPropsList();
+    var listEl = document.getElementById('propsList');
+    var block = document.getElementById('propsChecklist');
+    if(names.length === 0){ block.style.display = 'none'; return; }
+    block.style.display = 'block';
+    names.forEach(function(name){
+      if(!findPropByName(name) && !propsAddRequested[name]){
+        propsAddRequested[name] = true;
+        var maxOrder = state.Props.reduce(function(m,p){ return Math.max(m,p.order); }, 0);
+        var np = {id:newId('pr'), name:name, done:false, order:maxOrder+1};
+        state.Props.push(np);
+        postAction({action:'add', sheet:'Props', fields:{id:np.id, name:np.name, done:'FALSE', order:np.order}});
+      }
+    });
+    listEl.innerHTML = '';
+    names.forEach(function(name){
+      var prop = findPropByName(name);
+      if(!prop) return;
+      var lab = document.createElement('label');
+      lab.className = 'props-item' + (prop.done ? ' done' : '');
+      var cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.checked = prop.done;
+      cb.addEventListener('change', function(){
+        prop.done = cb.checked; lab.classList.toggle('done', cb.checked);
+        postAction({action:'update', sheet:'Props', id:prop.id, fields:{done: prop.done ? 'TRUE' : 'FALSE'}});
+      });
+      var sp = document.createElement('span'); sp.textContent = name;
+      lab.appendChild(cb); lab.appendChild(sp); listEl.appendChild(lab);
+    });
+  }
+
+  // ================= 廠商聯繫清單 =================
+  var VENDOR_SHEET_COL = {line:'LINE', staff_count:'工作人員人數', meat_count:'葷食', veg_count:'素食', dietary_restriction:'飲食禁忌'};
+  var VENDOR_MUTED_FIELDS = {staff_count:1, meat_count:1, veg_count:1, dietary_restriction:1};
+  var MUTED_A = /^\s*(不用|不需要?|不必)(準備|填寫|填|了|提供|供餐|用餐|餐點|安排|預留|訂|餐)?\s*[。.!！]?\s*$/;
+  var MUTED_B = /^\s*(無|免|沒有|n\/?a|[-－—–]+)\s*[。.!！]?\s*$/i;
+  function isMutedValue(v){ var t = String(v == null ? '' : v); return MUTED_A.test(t) || MUTED_B.test(t); }
+
+  function makeVendorCell(row, field, placeholder){
+    var td = document.createElement('td');
+    var cell = document.createElement('div');
+    cell.className = 'cell'; cell.contentEditable = 'true';
+    cell.textContent = row[field] || '';
+    if(!row[field] && placeholder){ cell.classList.add('empty'); cell.dataset.placeholder = placeholder; }
+    if(VENDOR_MUTED_FIELDS[field] && isMutedValue(row[field])) cell.classList.add('muted-value');
+    cell.addEventListener('focus', function(){ cell.classList.remove('empty'); });
+    cell.addEventListener('blur', function(){
+      var val = cell.textContent.trim();
+      row[field] = val;
+      if(!val && placeholder) cell.classList.add('empty');
+      cell.classList.toggle('muted-value', !!(VENDOR_MUTED_FIELDS[field] && isMutedValue(val)));
+      var f = {}; f[VENDOR_SHEET_COL[field] || field] = val;
+      postAction({action:'update', sheet:'Vendors', id:row.id, fields:f});
+    });
+    cell.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); cell.blur(); } });
+    td.appendChild(cell);
+    return td;
+  }
+
+  function renderVendors(){
+    var tbody = document.getElementById('vendorTbody');
+    tbody.innerHTML = '';
+    state.Vendors.slice().sort(function(a,b){ return a.order - b.order; }).forEach(function(row){
+      var tr = document.createElement('tr');
+      [['category','類別'],['name','廠商名稱'],['contact','聯絡人'],['phone','電話'],['line','LINE ID'],['arrival','到場時間'],['staff_count','人數'],['meat_count','葷食'],['veg_count','素食'],['dietary_restriction','飲食禁忌'],['note','備註']]
+        .forEach(function(c){ tr.appendChild(makeVendorCell(row, c[0], c[1])); });
+      var dtd = document.createElement('td');
+      var del = document.createElement('button');
+      del.className = 'vendor-del'; del.textContent = '刪除';
+      del.addEventListener('click', function(){
+        state.Vendors = state.Vendors.filter(function(i){ return i.id !== row.id; });
+        renderVendors();
+        postAction({action:'delete', sheet:'Vendors', id:row.id});
+      });
+      dtd.appendChild(del); tr.appendChild(dtd);
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.getElementById('addVendorBtn').addEventListener('click', function(){
+    var maxOrder = state.Vendors.reduce(function(m,i){ return Math.max(m,i.order); }, 0);
+    var row = {id:newId('v'), category:'', name:'', contact:'', phone:'', line:'', arrival:'', note:'', staff_count:'', meat_count:'', veg_count:'', dietary_restriction:'', order:maxOrder+1};
+    state.Vendors.push(row);
+    renderVendors();
+    postAction({action:'add', sheet:'Vendors', fields:{id:row.id, category:'', name:'', contact:'', phone:'', LINE:'', arrival:'', note:'', '工作人員人數':'', '葷食':'', '素食':'', '飲食禁忌':'', order:row.order}});
+  });
+
+  // ================= 廠商尾款 =================
+  var paymentsUnlocked = false;
+  function normalizePaymentRow(r){
+    return {id:toStr(r.id), name:toStr(r.name), role:toStr(r.role), amount:toStr(r.amount), pay_method:toStr(r.pay_method), pay_label:toStr(r.pay_label),
+      when:toStr(r.when), when_label:toStr(r.when_label), contact:toStr(r.contact !== undefined ? r.contact : r.Contact), note:toStr(r.note), flag:toBool(r.flag), confirmed:toBool(r.confirmed), order:toNum(r.order)};
+  }
+  function parseAmount(v){ var n = parseFloat((v||'').toString().replace(/[^0-9.]/g,'')); return isNaN(n) ? null : n; }
+
+  function renderPayments(){
+    var rows = state.Payments.slice().sort(function(a,b){ return a.order - b.order; });
+    var list = document.getElementById('paymentsCardList');
+    list.innerHTML = '';
+    var total = rows.reduce(function(s,p){ var n = parseAmount(p.amount); return s + (n || 0); }, 0);
+    document.getElementById('paymentsTotalAmount').textContent = 'NT$ ' + total.toLocaleString('en-US');
+    document.getElementById('paymentsTotalCount').textContent = rows.length;
+    var cc = rows.filter(function(p){ return p.confirmed; }).length;
+    document.getElementById('paymentsCheckedCount').textContent = cc;
+    document.getElementById('paymentsProgressFill').style.width = (rows.length ? Math.round(cc/rows.length*100) : 0) + '%';
+
+    rows.forEach(function(p){
+      var card = document.createElement('div');
+      card.className = 'payment-card' + (p.flag ? ' flagged' : '') + (p.confirmed ? ' confirmed' : '');
+      var cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.checked = p.confirmed;
+      cb.addEventListener('change', function(){
+        p.confirmed = cb.checked; renderPayments();
+        postAction({action:'update', sheet:'Payments', id:p.id, fields:{confirmed: p.confirmed ? 'TRUE' : 'FALSE'}});
+      });
+      var mid = document.createElement('div');
+      mid.innerHTML = '<div class="payment-name">' + esc(p.name) + '</div>' +
+        (p.role ? '<div class="payment-role">' + esc(p.role) + '</div>' : '') +
+        (p.contact ? '<div class="payment-contact">' + esc(p.contact).replace(/\|/g,'　') + '</div>' : '') +
+        (p.note ? '<div class="payment-note">' + esc(p.note) + '</div>' : '');
+      var right = document.createElement('div');
+      right.className = 'payment-amount-block';
+      var amt = parseAmount(p.amount);
+      var payCls = p.pay_method === 'card' ? 'card' : 'cash';
+      var whenCls = p.when === 'pending' ? 'pending' : (p.when === 'after' ? 'after' : 'cash');
+      right.innerHTML = '<div class="payment-amount">' + (amt !== null && p.amount ? 'NT$ ' + amt.toLocaleString('en-US') : '－') + '</div><div>' +
+        (p.pay_label ? '<span class="payment-badge ' + payCls + '">' + esc(p.pay_label) + '</span>' : '') +
+        (p.when_label ? '<span class="payment-badge ' + whenCls + '">' + esc(p.when_label) + '</span>' : '') + '</div>';
+      card.appendChild(cb); card.appendChild(mid); card.appendChild(right);
+      list.appendChild(card);
+    });
+  }
+
+  var passInput = document.getElementById('paymentsPasscode');
+  function tryUnlockPayments(){
+    if(passInput.value === CONFIG.paymentsPasscode){
+      paymentsUnlocked = true;
+      renderPayments();
+      document.getElementById('paymentsGate').style.display = 'none';
+      document.getElementById('paymentsContent').classList.add('open');
+      document.getElementById('paymentsErr').style.display = 'none';
+    }else{
+      document.getElementById('paymentsErr').style.display = 'block';
+    }
+  }
+  document.getElementById('paymentsUnlock').addEventListener('click', tryUnlockPayments);
+  passInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') tryUnlockPayments(); });
+
+  loadAll(false);
+})();
+</script>
+</body>
+</html>
