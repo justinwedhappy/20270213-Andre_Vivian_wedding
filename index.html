@@ -9,21 +9,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&family=Special+Elite&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F3ECDF;        /* 米色紙 */
-    --paper-deep:#E8DCC6;
-    --card:#FBF7EF;
-    --ink:#3A2E28;          /* 墨色 */
-    --ink-soft:#73635A;
-    --rust:#9A4F32;         /* 鏽紅：主色 */
-    --rust-deep:#7A3B24;
-    --olive:#6E7448;        /* 橄欖綠 */
-    --mustard:#C49A3C;      /* 芥末黃 */
-    --line:#D8C9AE;
-    --red:#A8402F;
-    --done:#A99C8A;
-    --overdue:#F2D9CF;
-    --soon:#F3E6C4;
-    --donebg:#ECE6D9;
+    /* 色系參考香頌私宅洋樓：白色老洋樓外牆、溫潤木地板、歐風古董傢俱、百年窗櫺透進來的午後陽光 */
+    --paper:#EEE5D3;        /* 泛黃的象牙白牆 */
+    --paper-deep:#E0D1B5;
+    --card:#F8F2E5;         /* 舊瓷白 */
+    --ink:#2F221C;          /* 胡桃木深褐 */
+    --ink-soft:#6E5B4D;
+    --rust:#7E2F33;         /* 酒紅（香頌・法式小酒館） */
+    --rust-deep:#5E2025;
+    --olive:#56634A;        /* 窗外老樹的墨綠 */
+    --mustard:#A9874A;      /* 古銅黃銅 */
+    --line:#CDB894;
+    --red:#9A3434;
+    --done:#A49580;
+    --overdue:#EDD3CB;
+    --soon:#EFE1BF;
+    --donebg:#E6DECC;
   }
   *{box-sizing:border-box;}
   html{font-size:16px;}
@@ -39,35 +40,64 @@
   }
   body > *{position:relative; z-index:1;}
 
-  /* ---------- 背景動畫：飄落的紙花瓣、光暈與底片閃爍 ---------- */
+  /* ---------- 背景動畫：老洋樓午後 —— 窗櫺光影、浮塵、乾燥花瓣與香頌音符 ---------- */
   .bg-anim{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
-  .bg-glow{position:absolute; border-radius:50%; filter:blur(60px); opacity:.35;}
-  .bg-glow.g1{width:420px; height:420px; background:#E9C9A6; top:-120px; left:-80px; animation:glowDrift 22s ease-in-out infinite alternate;}
-  .bg-glow.g2{width:360px; height:360px; background:#D9DDB8; bottom:-120px; right:-60px; animation:glowDrift 26s ease-in-out infinite alternate-reverse;}
-  .bg-glow.g3{width:260px; height:260px; background:#F0D9A8; top:40%; left:55%; animation:glowDrift 30s ease-in-out infinite alternate;}
-  @keyframes glowDrift{
-    0%{transform:translate(0,0) scale(1);}
-    50%{transform:translate(60px,40px) scale(1.12);}
-    100%{transform:translate(-40px,80px) scale(.95);}
+  /* 斜斜照進來的午後陽光 */
+  .sunbeam{position:absolute; top:-30%; left:-20%; width:140%; height:160%;
+    background:repeating-linear-gradient(115deg, rgba(255,236,196,0) 0 90px, rgba(255,232,186,.28) 90px 170px, rgba(255,236,196,0) 170px 320px);
+    filter:blur(18px); animation:beamShift 18s ease-in-out infinite alternate; mix-blend-mode:soft-light;}
+  @keyframes beamShift{0%{transform:translateX(-40px); opacity:.55;} 50%{opacity:.95;} 100%{transform:translateX(60px); opacity:.6;}}
+  /* 百年窗櫺的影子 */
+  /* 1F 大廳的水晶吊燈，輕輕擺動、燭光閃爍 */
+  .chandelier{position:absolute; top:-6px; left:57%; width:230px; transform-origin:50% 0; opacity:.5; animation:chandSway 9s ease-in-out infinite;}
+  .chandelier .flame{transform-box:fill-box; transform-origin:50% 100%; animation:flameFlick 2.4s ease-in-out infinite;}
+  .chandelier .flame:nth-of-type(2n){animation-duration:3.1s; animation-delay:-.8s;}
+  .chandelier .glow{animation:glowPulse 4s ease-in-out infinite;}
+  @keyframes chandSway{0%,100%{transform:rotate(-1.6deg);} 50%{transform:rotate(1.6deg);}}
+  @keyframes flameFlick{0%,100%{transform:scaleY(1); opacity:.95;} 40%{transform:scaleY(1.18) scaleX(.9); opacity:1;} 70%{transform:scaleY(.88); opacity:.8;}}
+  @keyframes glowPulse{0%,100%{opacity:.35;} 50%{opacity:.6;}}
+  @media (max-width:700px){ .chandelier{width:120px; left:auto; right:-14px; opacity:.35;} }
+  @media (max-width:480px){ .eyebrow{letter-spacing:.12em; font-size:.74rem;} .eyebrow::after{flex-basis:30px;} }
+  /* 1F 黑白棋盤格地磚，從畫面底部往遠處延伸 */
+  .checker-floor{position:absolute; left:-25%; right:-25%; bottom:-6vh; height:46vh;
+    background-image:conic-gradient(#2B2522 25%, #F6F0E3 0 50%, #2B2522 0 75%, #F6F0E3 0);
+    background-size:90px 90px; opacity:.11;
+    transform:perspective(420px) rotateX(58deg); transform-origin:50% 100%;
+    -webkit-mask-image:linear-gradient(to top, #000 10%, transparent 92%); mask-image:linear-gradient(to top, #000 10%, transparent 92%);
+    animation:floorGlide 40s linear infinite;}
+  @keyframes floorGlide{from{background-position:0 0;} to{background-position:180px 0;}}
+  /* 四周泛黃暗角，像老照片 */
+  .vignette{position:absolute; inset:0; background:radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 55%, rgba(92,60,34,.24) 100%);}
+  /* 浮塵 */
+  .dust{position:absolute; border-radius:50%; background:#FFF4DA; box-shadow:0 0 6px rgba(255,236,190,.9); animation:dustFloat ease-in-out infinite;}
+  @keyframes dustFloat{
+    0%{transform:translate(0,0); opacity:0;}
+    15%{opacity:.85;}
+    50%{transform:translate(40px,-60px);}
+    85%{opacity:.7;}
+    100%{transform:translate(-20px,-130px); opacity:0;}
   }
-  .petal{
-    position:absolute; top:-40px; display:block; opacity:.55;
-    border-radius:60% 0 60% 0; will-change:transform;
-    animation:petalFall linear infinite;
-  }
-  .petal.dot{border-radius:50%;}
-  .petal.star{border-radius:0; background:none !important; color:var(--mustard); font-size:14px; line-height:1;}
-  .petal.star::before{content:"✦";}
+  /* 乾燥玫瑰花瓣 */
+  .petal{position:absolute; top:-40px; display:block; border-radius:65% 0 65% 0; will-change:transform; animation:petalFall linear infinite;}
   @keyframes petalFall{
     0%{transform:translate3d(0,-40px,0) rotate(0deg);}
-    25%{transform:translate3d(36px,25vh,0) rotate(90deg);}
-    50%{transform:translate3d(-24px,50vh,0) rotate(180deg);}
-    75%{transform:translate3d(30px,75vh,0) rotate(270deg);}
-    100%{transform:translate3d(-10px,108vh,0) rotate(360deg);}
+    25%{transform:translate3d(40px,25vh,0) rotate(80deg);}
+    50%{transform:translate3d(-30px,50vh,0) rotate(170deg);}
+    75%{transform:translate3d(34px,75vh,0) rotate(260deg);}
+    100%{transform:translate3d(-12px,108vh,0) rotate(350deg);}
   }
-  .film-flicker{position:absolute; inset:0; background:rgba(255,248,235,.0); animation:flicker 7s steps(1) infinite;}
-  @keyframes flicker{0%,100%{background:rgba(255,248,235,0);} 47%{background:rgba(255,248,235,.06);} 48%{background:rgba(255,248,235,0);} 83%{background:rgba(120,90,60,.03);} 84%{background:rgba(255,248,235,0);}}
-  /* 照片輕輕擺動、郵戳慢慢轉 */
+  /* 香頌音符，慢慢往上飄 */
+  .note{position:absolute; bottom:-40px; font-family:'Cormorant Garamond',serif; color:var(--rust); animation:noteRise linear infinite;}
+  @keyframes noteRise{
+    0%{transform:translate(0,0) rotate(-8deg); opacity:0;}
+    10%{opacity:.35;}
+    50%{transform:translate(30px,-55vh) rotate(8deg);}
+    90%{opacity:.25;}
+    100%{transform:translate(-20px,-110vh) rotate(-6deg); opacity:0;}
+  }
+  .film-flicker{position:absolute; inset:0; animation:flicker 8s steps(1) infinite;}
+  @keyframes flicker{0%,100%{background:rgba(255,244,220,0);} 46%{background:rgba(255,244,220,.07);} 47%{background:rgba(255,244,220,0);} 81%{background:rgba(90,60,30,.04);} 82%{background:rgba(255,244,220,0);}}
+  /* 照片輕輕擺動、郵戳慢慢轉、倒數數字微微跳動 */
   .photo-frame{animation:frameSway 6s ease-in-out infinite;}
   @keyframes frameSway{0%,100%{transform:rotate(-2.5deg);} 50%{transform:rotate(-1deg) translateY(-4px);}}
   .postmark{animation:stampSpin 40s linear infinite;}
@@ -75,8 +105,8 @@
   .count-num{display:inline-block; animation:pulseNum 3s ease-in-out infinite;}
   @keyframes pulseNum{0%,100%{transform:scale(1);} 50%{transform:scale(1.08);}}
   @media (prefers-reduced-motion: reduce){
-    .bg-anim .petal, .film-flicker{display:none;}
-    .bg-glow, .photo-frame, .postmark, .count-num{animation:none;}
+    .bg-anim .petal, .bg-anim .dust, .bg-anim .note, .film-flicker{display:none;}
+    .sunbeam, .chandelier, .chandelier .flame, .chandelier .glow, .checker-floor, .photo-frame, .postmark, .count-num{animation:none;}
   }
   @media print{ .bg-anim{display:none;} }
   h1,h2,h3{font-weight:700; margin:0; color:var(--ink);}
@@ -87,15 +117,18 @@
   input,textarea{font-family:inherit; color:var(--ink);}
 
   /* ---------- header ---------- */
-  header{padding:48px 0 40px; border-bottom:1px solid var(--line);}
+  header{padding:48px 0 52px;}
+  header::after{content:""; position:absolute; left:0; right:0; bottom:0; height:10px; background-image:conic-gradient(#2B2522 25%, #F6F0E3 0 50%, #2B2522 0 75%, #F6F0E3 0); background-size:10px 10px; opacity:.55; border-top:1px solid #2B2522; border-bottom:1px solid #2B2522;}
   .header-grid{display:grid; grid-template-columns:1fr auto; gap:36px; align-items:center;}
   @media (max-width:720px){ .header-grid{grid-template-columns:1fr;} .photo-wrap{order:-1; justify-self:center;} }
   .eyebrow{font-size:.82rem; color:var(--rust); letter-spacing:.28em; display:flex; align-items:center; gap:12px;}
+  .eyebrow::before{content:"❦"; font-size:1rem; letter-spacing:0; color:var(--rust);}
   .eyebrow::after{content:""; flex:0 0 60px; height:1px; background:var(--rust); opacity:.6;}
   header h1{font-size:clamp(1.7rem,4.4vw,2.6rem); margin-top:14px; line-height:1.45; letter-spacing:.08em;}
   header h1 .amp{font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:500; color:var(--rust); padding:0 .25em;}
   .en-names{font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.25rem; color:var(--ink-soft); margin-top:4px;}
   .meta-line{margin-top:18px; display:flex; flex-wrap:wrap; gap:8px 22px; font-size:.9rem; color:var(--ink-soft);}
+  .door-plate{display:inline-block; margin:0 3px; padding:0 7px; font-family:'Special Elite',monospace; font-size:.85rem; line-height:1.5; color:#2B2522; background:#FBF8F1; border:1.5px solid #2B2522; border-radius:3px; box-shadow:1px 1px 0 var(--mustard); border-bottom:1.5px solid #2B2522 !important;}
   .meta-line span{border-bottom:1px dashed var(--line); padding-bottom:2px;}
 
   .status-row{margin-top:24px; display:flex; align-items:center; gap:14px 28px; flex-wrap:wrap; max-width:640px;}
@@ -111,19 +144,19 @@
   .progress-row{flex:1 1 220px; min-width:200px;}
   .progress-label{display:flex; justify-content:space-between; font-size:.8rem; color:var(--ink-soft); margin-bottom:6px;}
   .progress-track{height:8px; background:var(--paper-deep); border:1px solid var(--line);}
-  .progress-fill{height:100%; background:repeating-linear-gradient(45deg,var(--olive) 0 6px,#7E8556 6px 12px); transition:width .4s ease;}
+  .progress-fill{height:100%; background:repeating-linear-gradient(45deg,var(--olive) 0 6px,#66745A 6px 12px); transition:width .4s ease;}
 
   /* 底片相框 */
   .photo-wrap{position:relative; width:220px;}
   .photo-frame{
-    background:#FDFAF3; padding:12px 12px 44px; transform:rotate(-2.5deg);
+    background:#F7EFDF; padding:12px 12px 44px; transform:rotate(-2.5deg);
     box-shadow:0 10px 24px rgba(58,46,40,.18), 0 1px 0 var(--line);
   }
   .photo-frame::before{
     content:""; position:absolute; top:-12px; left:50%; width:84px; height:22px; transform:translateX(-50%) rotate(3deg);
-    background:rgba(196,154,60,.55); box-shadow:0 1px 2px rgba(0,0,0,.08);
+    background:rgba(169,135,74,.5); box-shadow:0 1px 2px rgba(0,0,0,.08);
   }
-  .photo-frame img{display:block; width:100%; height:auto; filter:sepia(.28) saturate(.85) contrast(.96);}
+  .photo-frame img{display:block; width:100%; height:auto; filter:sepia(.42) saturate(.8) contrast(.95) brightness(.98);}
   .photo-placeholder{
     aspect-ratio:4/5; border:1px dashed var(--line); background:var(--paper);
     display:flex; align-items:center; justify-content:center; text-align:center; font-size:.8rem; color:var(--ink-soft); padding:12px;
@@ -132,7 +165,7 @@
   .postmark{position:absolute; right:-30px; bottom:-34px; width:96px; height:96px; transform:rotate(-14deg); opacity:.75;}
 
   /* ---------- tabs ---------- */
-  .tabnav-shell{position:sticky; top:0; z-index:30; background:rgba(243,236,223,.96); backdrop-filter:blur(4px); padding-top:16px; border-bottom:1px solid var(--ink);}
+  .tabnav-shell{position:sticky; top:0; z-index:30; background:rgba(238,229,211,.96); backdrop-filter:blur(4px); padding-top:16px; border-bottom:1px solid var(--ink);}
   .tabnav{display:flex; gap:6px; max-width:1240px; margin:0 auto; padding:0 24px; overflow-x:auto;}
   .tab-btn{
     background:var(--paper-deep); border:1px solid var(--line); border-bottom:none; border-radius:6px 6px 0 0;
@@ -282,33 +315,83 @@
     body{background:#fff;}
     .table-wrap{box-shadow:none;}
   }
+  @media (max-width:480px){ .eyebrow{letter-spacing:.1em; font-size:.72rem; white-space:nowrap;} .eyebrow::after{flex:0 1 30px;} }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 <div class="bg-anim" aria-hidden="true">
-  <div class="bg-glow g1"></div><div class="bg-glow g2"></div><div class="bg-glow g3"></div>
+  <div class="sunbeam"></div>
+  <div class="checker-floor"></div>
+  <svg class="chandelier" viewBox="0 0 240 230" fill="none" stroke="#8A6A3A" stroke-width="2" stroke-linecap="round">
+    <line x1="120" y1="0" x2="120" y2="70"/>
+    <circle cx="120" cy="74" r="5" fill="#A9874A" stroke="none"/>
+    <path d="M120 80 C120 100 112 112 120 126 C128 112 120 100 120 80"/>
+    <ellipse cx="120" cy="134" rx="22" ry="8"/>
+    <path d="M98 134 C70 136 52 120 40 102"/><path d="M142 134 C170 136 188 120 200 102"/>
+    <path d="M104 140 C86 152 74 150 66 140"/><path d="M136 140 C154 152 166 150 174 140"/>
+    <path d="M120 142 L120 170"/><ellipse cx="120" cy="174" rx="9" ry="4"/>
+    <g fill="#F6F0E3" stroke="#8A6A3A" stroke-width="1.5">
+      <rect x="35" y="86" width="10" height="16" rx="1"/><rect x="195" y="86" width="10" height="16" rx="1"/>
+      <rect x="61" y="124" width="10" height="16" rx="1"/><rect x="169" y="124" width="10" height="16" rx="1"/>
+      <rect x="115" y="96" width="10" height="16" rx="1" opacity="0"/>
+    </g>
+    <g fill="#E9B65C" stroke="none">
+      <circle class="glow" cx="40" cy="78" r="14" fill="#FFE2A3"/><circle class="glow" cx="200" cy="78" r="14" fill="#FFE2A3"/>
+      <circle class="glow" cx="66" cy="116" r="14" fill="#FFE2A3"/><circle class="glow" cx="174" cy="116" r="14" fill="#FFE2A3"/>
+      <path class="flame" d="M40 85 C36 79 39 74 40 70 C41 74 44 79 40 85Z"/>
+      <path class="flame" d="M200 85 C196 79 199 74 200 70 C201 74 204 79 200 85Z"/>
+      <path class="flame" d="M66 123 C62 117 65 112 66 108 C67 112 70 117 66 123Z"/>
+      <path class="flame" d="M174 123 C170 117 173 112 174 108 C175 112 178 117 174 123Z"/>
+    </g>
+    <g fill="#F3EBDD" stroke="#B9A27A" stroke-width="1">
+      <path d="M58 140 l3 9 l-3 9 l-3 -9z"/><path d="M182 140 l3 9 l-3 9 l-3 -9z"/>
+      <path d="M90 146 l3 10 l-3 10 l-3 -10z"/><path d="M150 146 l3 10 l-3 10 l-3 -10z"/>
+      <path d="M120 180 l4 14 l-4 14 l-4 -14z"/>
+    </g>
+  </svg>
+  <div class="vignette"></div>
   <div class="film-flicker"></div>
 </div>
 <script>
 (function(){
   try{ if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
   var box = document.querySelector('.bg-anim');
-  var colors = ['#C98B6B','#D8B26A','#A9AE84','#E3B7A0','#B9765A'];
-  var n = window.innerWidth < 600 ? 12 : 22;
-  for(var i=0;i<n;i++){
+  var small = window.innerWidth < 600;
+  function rnd(a,b){ return a + Math.random()*(b-a); }
+  // 浮塵
+  for(var i=0;i<(small?18:34);i++){
+    var d = document.createElement('span');
+    d.className = 'dust';
+    var s = rnd(1.5,3.5);
+    d.style.width = d.style.height = s + 'px';
+    d.style.left = rnd(0,100) + 'vw'; d.style.top = rnd(10,100) + 'vh';
+    d.style.animationDuration = rnd(9,18) + 's'; d.style.animationDelay = (-rnd(0,18)) + 's';
+    box.appendChild(d);
+  }
+  // 乾燥玫瑰花瓣
+  var petalColors = ['#8C3A3E','#A85A55','#B98A6E','#7E2F33','#C7A27A'];
+  for(var j=0;j<(small?6:12);j++){
     var p = document.createElement('span');
-    var kind = Math.random();
-    p.className = 'petal' + (kind < .2 ? ' star' : (kind < .45 ? ' dot' : ''));
-    var size = 6 + Math.random()*10;
-    p.style.width = size + 'px';
-    p.style.height = (kind < .45 ? size : size*0.7) + 'px';
-    p.style.left = (Math.random()*100) + 'vw';
-    p.style.background = colors[i % colors.length];
-    p.style.animationDuration = (14 + Math.random()*16) + 's';
-    p.style.animationDelay = (-Math.random()*30) + 's';
-    p.style.opacity = (.3 + Math.random()*.4).toFixed(2);
+    p.className = 'petal';
+    var w = rnd(7,14);
+    p.style.width = w + 'px'; p.style.height = (w*0.72) + 'px';
+    p.style.left = rnd(0,100) + 'vw';
+    p.style.background = petalColors[j % petalColors.length];
+    p.style.opacity = rnd(.35,.6).toFixed(2);
+    p.style.animationDuration = rnd(18,32) + 's'; p.style.animationDelay = (-rnd(0,32)) + 's';
     box.appendChild(p);
+  }
+  // 香頌音符
+  var notes = ['♪','♫','♩','♬'];
+  for(var k=0;k<(small?3:6);k++){
+    var n = document.createElement('span');
+    n.className = 'note';
+    n.textContent = notes[k % notes.length];
+    n.style.left = rnd(4,96) + 'vw';
+    n.style.fontSize = rnd(14,24) + 'px';
+    n.style.animationDuration = rnd(24,40) + 's'; n.style.animationDelay = (-rnd(0,40)) + 's';
+    box.appendChild(n);
   }
 })();
 </script>
@@ -344,10 +427,10 @@
         <div class="photo-caption" id="photoCaption"></div>
       </div>
       <svg class="postmark" viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r="44" fill="none" stroke="#9A4F32" stroke-width="1.6"/>
-        <circle cx="50" cy="50" r="34" fill="none" stroke="#9A4F32" stroke-width="1"/>
-        <text x="50" y="47" text-anchor="middle" font-family="Special Elite, monospace" font-size="9" fill="#9A4F32" letter-spacing="1">WEDDING</text>
-        <text x="50" y="61" text-anchor="middle" font-family="Special Elite, monospace" font-size="11" fill="#9A4F32" id="postmarkYear">2027</text>
+        <circle cx="50" cy="50" r="44" fill="none" stroke="#7E2F33" stroke-width="1.6"/>
+        <circle cx="50" cy="50" r="34" fill="none" stroke="#7E2F33" stroke-width="1"/>
+        <text x="50" y="47" text-anchor="middle" font-family="Special Elite, monospace" font-size="9" fill="#7E2F33" letter-spacing="1">WEDDING</text>
+        <text x="50" y="61" text-anchor="middle" font-family="Special Elite, monospace" font-size="11" fill="#7E2F33" id="postmarkYear">2027</text>
       </svg>
     </div>
   </div>
@@ -592,7 +675,14 @@ var CHECKLIST_TEMPLATE = [
   if(CONFIG.venueAddress) document.getElementById('hVenue').title = CONFIG.venueAddress;
   if(CONFIG.venueAddress){
     var addr = document.createElement('span');
-    addr.textContent = '地址　' + CONFIG.venueAddress;
+    var m52 = CONFIG.venueAddress.match(/^(.*?)(\d+)(號)$/);
+    if(m52){
+      addr.appendChild(document.createTextNode('地址　' + m52[1]));
+      var plate = document.createElement('span'); plate.className = 'door-plate'; plate.textContent = m52[2];
+      addr.appendChild(plate); addr.appendChild(document.createTextNode(m52[3]));
+    }else{
+      addr.textContent = '地址　' + CONFIG.venueAddress;
+    }
     document.querySelector('.meta-line').appendChild(addr);
   }
   document.getElementById('postmarkYear').textContent = CONFIG.date.slice(0,4);
