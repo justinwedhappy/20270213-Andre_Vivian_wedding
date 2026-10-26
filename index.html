@@ -38,6 +38,47 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .3 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   body > *{position:relative; z-index:1;}
+
+  /* ---------- 背景動畫：飄落的紙花瓣、光暈與底片閃爍 ---------- */
+  .bg-anim{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+  .bg-glow{position:absolute; border-radius:50%; filter:blur(60px); opacity:.35;}
+  .bg-glow.g1{width:420px; height:420px; background:#E9C9A6; top:-120px; left:-80px; animation:glowDrift 22s ease-in-out infinite alternate;}
+  .bg-glow.g2{width:360px; height:360px; background:#D9DDB8; bottom:-120px; right:-60px; animation:glowDrift 26s ease-in-out infinite alternate-reverse;}
+  .bg-glow.g3{width:260px; height:260px; background:#F0D9A8; top:40%; left:55%; animation:glowDrift 30s ease-in-out infinite alternate;}
+  @keyframes glowDrift{
+    0%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(60px,40px) scale(1.12);}
+    100%{transform:translate(-40px,80px) scale(.95);}
+  }
+  .petal{
+    position:absolute; top:-40px; display:block; opacity:.55;
+    border-radius:60% 0 60% 0; will-change:transform;
+    animation:petalFall linear infinite;
+  }
+  .petal.dot{border-radius:50%;}
+  .petal.star{border-radius:0; background:none !important; color:var(--mustard); font-size:14px; line-height:1;}
+  .petal.star::before{content:"✦";}
+  @keyframes petalFall{
+    0%{transform:translate3d(0,-40px,0) rotate(0deg);}
+    25%{transform:translate3d(36px,25vh,0) rotate(90deg);}
+    50%{transform:translate3d(-24px,50vh,0) rotate(180deg);}
+    75%{transform:translate3d(30px,75vh,0) rotate(270deg);}
+    100%{transform:translate3d(-10px,108vh,0) rotate(360deg);}
+  }
+  .film-flicker{position:absolute; inset:0; background:rgba(255,248,235,.0); animation:flicker 7s steps(1) infinite;}
+  @keyframes flicker{0%,100%{background:rgba(255,248,235,0);} 47%{background:rgba(255,248,235,.06);} 48%{background:rgba(255,248,235,0);} 83%{background:rgba(120,90,60,.03);} 84%{background:rgba(255,248,235,0);}}
+  /* 照片輕輕擺動、郵戳慢慢轉 */
+  .photo-frame{animation:frameSway 6s ease-in-out infinite;}
+  @keyframes frameSway{0%,100%{transform:rotate(-2.5deg);} 50%{transform:rotate(-1deg) translateY(-4px);}}
+  .postmark{animation:stampSpin 40s linear infinite;}
+  @keyframes stampSpin{from{transform:rotate(-14deg);} to{transform:rotate(346deg);}}
+  .count-num{display:inline-block; animation:pulseNum 3s ease-in-out infinite;}
+  @keyframes pulseNum{0%,100%{transform:scale(1);} 50%{transform:scale(1.08);}}
+  @media (prefers-reduced-motion: reduce){
+    .bg-anim .petal, .film-flicker{display:none;}
+    .bg-glow, .photo-frame, .postmark, .count-num{animation:none;}
+  }
+  @media print{ .bg-anim{display:none;} }
   h1,h2,h3{font-weight:700; margin:0; color:var(--ink);}
   .type{font-family:'Special Elite','Courier New',monospace; letter-spacing:.06em;}
   .wrap{max-width:1240px; margin:0 auto; padding:0 24px;}
@@ -88,7 +129,7 @@
     display:flex; align-items:center; justify-content:center; text-align:center; font-size:.8rem; color:var(--ink-soft); padding:12px;
   }
   .photo-caption{position:absolute; left:0; right:0; bottom:12px; text-align:center; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:var(--ink-soft);}
-  .postmark{position:absolute; right:-26px; bottom:-18px; width:96px; height:96px; transform:rotate(-14deg); opacity:.75;}
+  .postmark{position:absolute; right:-30px; bottom:-34px; width:96px; height:96px; transform:rotate(-14deg); opacity:.75;}
 
   /* ---------- tabs ---------- */
   .tabnav-shell{position:sticky; top:0; z-index:30; background:rgba(243,236,223,.96); backdrop-filter:blur(4px); padding-top:16px; border-bottom:1px solid var(--ink);}
@@ -220,6 +261,32 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
+<div class="bg-anim" aria-hidden="true">
+  <div class="bg-glow g1"></div><div class="bg-glow g2"></div><div class="bg-glow g3"></div>
+  <div class="film-flicker"></div>
+</div>
+<script>
+(function(){
+  try{ if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
+  var box = document.querySelector('.bg-anim');
+  var colors = ['#C98B6B','#D8B26A','#A9AE84','#E3B7A0','#B9765A'];
+  var n = window.innerWidth < 600 ? 12 : 22;
+  for(var i=0;i<n;i++){
+    var p = document.createElement('span');
+    var kind = Math.random();
+    p.className = 'petal' + (kind < .2 ? ' star' : (kind < .45 ? ' dot' : ''));
+    var size = 6 + Math.random()*10;
+    p.style.width = size + 'px';
+    p.style.height = (kind < .45 ? size : size*0.7) + 'px';
+    p.style.left = (Math.random()*100) + 'vw';
+    p.style.background = colors[i % colors.length];
+    p.style.animationDuration = (14 + Math.random()*16) + 's';
+    p.style.animationDelay = (-Math.random()*30) + 's';
+    p.style.opacity = (.3 + Math.random()*.4).toFixed(2);
+    box.appendChild(p);
+  }
+})();
+</script>
 
 <header>
   <div class="wrap header-grid">
@@ -333,7 +400,7 @@
       <button id="replaceItinBtn">↺ 改用預設流程草案</button>
       <span class="itin-export-updated" id="itinUpdatedLabel"></span>
     </div>
-    <p class="save-note">＊此流程為草案，建議於婚禮前 2 週與總召進行最終確認會議後定案。</p>
+    <p class="save-note">＊此流程為草案，建議於婚禮前 2 週與主持人及場地進行最終確認後定案。</p>
     <div class="props-checklist" id="propsChecklist">
       <div class="props-checklist-head">道具核對清單</div>
       <p class="props-checklist-sub">自動整理自流程表「道具」欄出現過的所有物品，準備好就打勾。</p>
@@ -471,8 +538,8 @@ var CHECKLIST_TEMPLATE = [
   ['2027/02/04 前','道具','準備婚禮當天道具','戒指、戒枕、簽名簿、座位卡、遊戲道具與獎品等，可參考「婚禮流程」頁的道具清單。'],
   ['2027/02/04 前','廠商尾款','準備尾款現金並分裝','依「廠商尾款」頁籤金額，連假前先領好現金並分裝信封。'],
   ['2027/02/12 前','流程','場地勘查或彩排','確認接待處、進場動線與拍照位置。'],
-  ['2027/02/12 前','道具','道具與尾款交給總召','前一天整理好當天要帶的物品與尾款。'],
-  ['婚禮當天','流程','享受屬於你們的午後','剩下的交給總召與團隊。']
+  ['2027/02/12 前','道具','整理當天要帶的道具與尾款','前一天整理好當天要帶的物品與尾款，並決定由誰保管。'],
+  ['婚禮當天','流程','享受屬於你們的午後','好好享受屬於你們的這一天。']
 ];
 
 (function(){
