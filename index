@@ -57,16 +57,17 @@
   .meta-line{margin-top:18px; display:flex; flex-wrap:wrap; gap:8px 22px; font-size:.9rem; color:var(--ink-soft);}
   .meta-line span{border-bottom:1px dashed var(--line); padding-bottom:2px;}
 
+  .status-row{margin-top:24px; display:flex; align-items:center; gap:14px 28px; flex-wrap:wrap; max-width:640px;}
   .count-ticket{
-    margin-top:26px; display:inline-flex; align-items:stretch; background:var(--card);
-    border:1px solid var(--line); box-shadow:2px 3px 0 var(--paper-deep);
+    flex:none; display:inline-flex; align-items:stretch; background:var(--card);
+    border:1px solid var(--line); box-shadow:2px 2px 0 var(--paper-deep);
   }
-  .count-ticket .stub{padding:10px 16px; border-right:2px dashed var(--line); font-size:.74rem; color:var(--ink-soft); writing-mode:vertical-rl; letter-spacing:.3em;}
-  .count-ticket .main{padding:10px 22px; display:flex; align-items:baseline; gap:10px;}
-  .count-num{font-family:'Special Elite',monospace; font-size:2.6rem; color:var(--rust-deep); line-height:1;}
-  .count-label{font-size:.86rem; color:var(--ink-soft);}
+  .count-ticket .stub{padding:6px 10px; border-right:2px dashed var(--line); font-size:.62rem; color:var(--ink-soft); letter-spacing:.18em; display:flex; align-items:center; line-height:1.3; text-align:center;}
+  .count-ticket .main{padding:6px 14px; display:flex; align-items:baseline; gap:6px;}
+  .count-num{font-family:'Special Elite',monospace; font-size:1.7rem; color:var(--rust-deep); line-height:1;}
+  .count-label{font-size:.8rem; color:var(--ink-soft);}
 
-  .progress-row{margin-top:24px; max-width:520px;}
+  .progress-row{flex:1 1 220px; min-width:200px;}
   .progress-label{display:flex; justify-content:space-between; font-size:.8rem; color:var(--ink-soft); margin-bottom:6px;}
   .progress-track{height:8px; background:var(--paper-deep); border:1px solid var(--line);}
   .progress-fill{height:100%; background:repeating-linear-gradient(45deg,var(--olive) 0 6px,#7E8556 6px 12px); transition:width .4s ease;}
@@ -223,15 +224,16 @@
 <header>
   <div class="wrap header-grid">
     <div>
-      <div class="eyebrow type">JUST.IN WEDDING · NOTEBOOK</div>
+      <div class="eyebrow type">Vivian Wedding Schedule</div>
       <h1><span id="hGroom">新郎</span><span class="amp">&amp;</span><span id="hBride">新娘</span></h1>
       <div class="en-names" id="hEnNames"></div>
       <div class="meta-line">
         <span>日期　<span class="type" id="hDate"></span></span>
         <span>地點　<span id="hVenue"></span></span>
       </div>
+      <div class="status-row">
       <div class="count-ticket">
-        <div class="stub type">ADMIT TWO</div>
+        <div class="stub type">ADMIT<br>TWO</div>
         <div class="main">
           <span class="count-label">還有</span>
           <span class="count-num" id="countdownNum">—</span>
@@ -241,6 +243,7 @@
       <div class="progress-row">
         <div class="progress-label"><span>籌備進度</span><span id="progressPct" class="type">0%</span></div>
         <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+      </div>
       </div>
     </div>
     <div class="photo-wrap">
@@ -286,6 +289,10 @@
       <span><span class="legend-dot" style="background:var(--overdue);"></span>已逾期</span>
       <span><span class="legend-dot" style="background:var(--soon);"></span>14 天內到期</span>
       <span><span class="legend-dot" style="background:var(--donebg);"></span>已完成</span>
+    </div>
+    <div class="itin-export-row" style="margin:-4px 0 18px;">
+      <button id="replaceChecklistBtn">↺ 改用 2/13 午宴版時程</button>
+      <span class="itin-export-updated">會清除試算表中目前的檢核項目，換成依婚期與春節連假重排的新時程</span>
     </div>
     <div id="checklistContainer"></div>
     <p class="save-note">＊勾選與編輯會即時同步到 Google 試算表（約每 20 秒自動更新，也可以手動點「重新整理」）。</p>
@@ -399,26 +406,73 @@
    ★ 新人資料設定區：換一組新人時，只需要改這裡 ★
    ========================================================= */
 var CONFIG = {
-  groom: '新郎',               // ← 請填新郎姓名
-  bride: 'Vivian',
-  groomEn: 'Groom',            // 照片下方與英文副標用，可留空
+  groom: 'Andre 安追',
+  bride: '仙女 Vivian',
+  groomEn: 'Andre',            // 照片下方的英文名，可留空
   brideEn: 'Vivian',
-  date: '2027-02-14',          // 婚禮日期，格式 YYYY-MM-DD（檢核表截止日會自動依此回推）
-  venue: '婚宴場地',           // ← 請填場地名稱
-  appsScriptUrl: 'PASTE_YOUR_APPS_SCRIPT_URL_HERE',   // 貼上 Apps Script 部署後 /exec 結尾的網址
+  date: '2027-02-13',          // 婚禮日期，格式 YYYY-MM-DD（檢核表截止日會自動依此回推）
+  venue: '香頌私宅洋樓（午宴）',
+  venueAddress: '臺北市中山區建國北路二段52號',
+  appsScriptUrl: 'https://script.google.com/macros/s/AKfycby5hmm6iBzDkRUWcLZSoGY5eIPtKkrOB1xebEux3cjBvtnS4c8pYutsVhP_YEi4H8rU/exec',   // 貼上 Apps Script 部署後 /exec 結尾的網址
   photoUrl: '',                // 婚紗照網址或 base64，留空則顯示預留框
-  paymentsPasscode: '0000'     // 尾款頁通關密碼（僅為輕量保護）
+  paymentsPasscode: 'vivian'   // 尾款頁通關密碼，不分大小寫（僅為輕量保護）
 };
 
 /* 試算表「Itinerary」分頁是空的時候，可以一鍵帶入的預設流程草案 */
+/* 午宴時間為草案，實際依場地供餐時段調整 */
 var DEFAULT_ITINERARY = [
-  {outline:'賓客入場・自由接待', summary:'賓客簽到、領取座位卡，自由拍照與交流', music:'輕柔背景音樂', screen:'新人照片輪播', props:'簽名簿、座位卡', note:'若決定新人在接待處迎賓，新人此時已在接待處'},
-  {outline:'主持人開場＋新人進場', summary:'主持人開場致詞，接著新人進場', music:'進場音樂', screen:'', props:'', note:'待定：A. 新人在接待處迎賓，主持人開場後請新人上台；B. 主持人開場後 cue 新人正式進場（需確認場地動線）'},
-  {outline:'交換戒指儀式', summary:'新人交換戒指', music:'儀式音樂', screen:'', props:'戒指、戒枕', note:'考慮中，待新人確認'},
-  {outline:'小遊戲時間', summary:'主持人帶領賓客互動小遊戲', music:'', screen:'遊戲畫面', props:'遊戲道具、小禮物', note:'考慮中，遊戲內容與獎品待定'},
-  {outline:'逐桌敬酒・聊天', summary:'新人逐桌敬酒，與賓客聊天合照', music:'背景音樂', screen:'新人照片輪播', props:'', note:''},
-  {outline:'甜點時刻・收尾致詞', summary:'甜點上桌，主持人收尾，新人簡單致詞感謝賓客蒞臨', music:'', screen:'', props:'麥克風', note:''},
-  {outline:'送客', summary:'新人於門口送客', music:'送客音樂', screen:'', props:'送客小物', note:''}
+  {time:'11:30', end_time:'12:00', outline:'賓客入場・自由接待', summary:'賓客簽到、領取座位卡，自由拍照與交流', music:'輕柔背景音樂', screen:'新人照片輪播', props:'簽名簿、座位卡', note:'若決定新人在接待處迎賓，新人此時已在接待處'},
+  {time:'12:00', end_time:'12:15', outline:'主持人開場＋新人進場', summary:'主持人開場致詞，接著新人進場', music:'進場音樂', screen:'', props:'', note:'待定：A. 新人在接待處迎賓，主持人開場後請新人上台；B. 主持人開場後 cue 新人正式進場（需確認洋樓動線）'},
+  {time:'12:15', end_time:'12:25', outline:'交換戒指儀式', summary:'新人交換戒指', music:'儀式音樂', screen:'', props:'戒指、戒枕', note:'考慮中，待新人確認'},
+  {time:'12:25', end_time:'12:40', outline:'小遊戲時間', summary:'主持人帶領賓客互動小遊戲', music:'', screen:'遊戲畫面', props:'遊戲道具、小禮物', note:'考慮中，遊戲內容與獎品待定'},
+  {time:'12:40', end_time:'13:40', outline:'逐桌敬酒・聊天', summary:'開席用餐，新人逐桌敬酒，與賓客聊天合照', music:'背景音樂', screen:'新人照片輪播', props:'', note:''},
+  {time:'13:40', end_time:'14:00', outline:'甜點時刻・收尾致詞', summary:'甜點上桌，主持人收尾，新人簡單致詞感謝賓客蒞臨', music:'', screen:'', props:'麥克風', note:''},
+  {time:'14:00', end_time:'14:30', outline:'送客', summary:'新人於門口送客', music:'送客音樂', screen:'', props:'送客小物', note:''}
+];
+
+/* 2027/02/13 香頌私宅洋樓 午宴版檢核表（已考量 2/6 春節連假，重要事項提前於年前完成） */
+var CHECKLIST_TEMPLATE = [
+  ['2026/11/08 前','場地','確認香頌私宅洋樓合約內容','私宅洋樓的包含項目差異大，先確認餐飲、桌椅、佈置、音響投影、可使用時段與進場時間，才知道哪些要另外找廠商。'],
+  ['2026/11/08 前','婚攝婚錄','預約婚攝／婚錄並確認合約內容','2 月是婚宴旺季，檔期要盡快確認。'],
+  ['2026/11/08 前','新秘','預約新秘並討論復古造型方向','午宴妝髮開始時間會比晚宴早很多，要和新秘確認當天幾點開妝。'],
+  ['2026/11/08 前','主持人','預約主持人','洋樓場地不一定有配合主持人，需要自行找。'],
+  ['2026/11/08 前','整體規劃','決定婚禮風格與主色系（復古文青）','風格定案後，喜帖、佈置、小物才能一致。'],
+  ['2026/11/08 前','出席名單','確認賓客名單初稿','私宅洋樓容納人數有限，先抓人數才能確認桌數與座位配置。'],
+  ['2026/11/22 前','禮服','婚紗禮服選定或訂製','訂製禮服工時較長，租借款式也建議提早選定。'],
+  ['2026/11/22 前','禮服','新郎西裝選定或訂製','復古風可以考慮背心、吊帶、領結等搭配。'],
+  ['2026/11/22 前','婚佈','預約婚禮佈置廠商並討論風格提案','確認洋樓既有的佈置與可以加強的區域（接待處、拍照區、主桌）。'],
+  ['2026/11/22 前','喜帖','決定喜帖樣式並送印','喜帖需要設計、打樣、印刷，遇到年底印刷廠也比較忙。'],
+  ['2026/11/22 前','喜餅','決定喜餅並預訂','春節前後是喜餅旺季，建議提早下訂並鎖定配送日期。'],
+  ['2026/11/22 前','流程','決定開場方式','A. 新人在接待處迎賓，主持人開場後請新人上台；B. 主持人開場後 cue 新人正式進場。需和場地確認動線。'],
+  ['2026/11/22 前','流程','決定是否安排交換戒指與小遊戲','決定後才能準備戒枕、遊戲道具與獎品。'],
+  ['2026/12/13 前','場地','與場地確認試菜時間並確定菜色','試菜可以提前確認菜色口味與擺盤，也一併確認甜點時刻的甜點內容。'],
+  ['2026/12/13 前','新秘','新娘秘書試妝','試妝可以提前確認造型方向，婚禮當天才不會有落差。'],
+  ['2026/12/13 前','禮服','婚紗試穿定案','定案後才能進行最終修改與配件搭配。'],
+  ['2026/12/13 前','婚禮小物','決定送客小物','需要提前訂購，避開春節前物流塞車。'],
+  ['2026/12/13 前','素材','準備婚禮播放影片／照片','先確認洋樓是否有投影或螢幕設備，再決定影片規格。'],
+  ['2026/12/13 前','出席名單','寄發婚宴調查表問卷給賓客','了解出席人數、是否攜伴、飲食禁忌，也可以順便蒐集祝福留言。'],
+  ['2026/12/13 前','音樂','整理婚禮各橋段音樂','接待、進場、戒指儀式、遊戲、敬酒、送客各自需要的音樂清單與檔案。'],
+  ['2026/12/13 前','流程','確認婚宴活動流程初版','先抓一版午宴時間軸，這也是「婚禮流程」頁籤的雛型。'],
+  ['2027/01/03 前','喜帖','寄發喜帖','2/6 是春節，建議元旦前後寄出，讓賓客在年前就能安排行程。可附上洋樓地圖與交通、停車資訊。'],
+  ['2027/01/03 前','婚攝婚錄','與婚攝婚錄溝通必拍畫面清單','列出最在意的畫面，也可以先挑好洋樓裡適合拍照的角落。'],
+  ['2027/01/03 前','場地','確認會場平面配置圖','包含接待處、拍照區、簽名區與桌次擺放位置，讓賓客動線清楚。'],
+  ['2027/01/03 前','主持人','與主持人確認完整流程稿','讓主持人清楚掌握每個橋段順序、開場方式與提詞重點。'],
+  ['2027/01/03 前','流程','確認主婚人與致詞名單','提前告知主婚人與致詞者，讓他們有時間準備。'],
+  ['2027/01/03 前','場地','安排新人自己的餐點','新人當天通常沒時間好好用餐，建議和場地確認精簡版餐點或打包方式。'],
+  ['2027/01/03 前','流程','(選填) 申請政府機關祝賀電或中堂','記得提前 2 週以上申請，並避開春節連假。'],
+  ['2027/01/24 前','場地','確認最終桌數與菜單','含素食與特殊飲食需求賓客的餐點安排。春節前要先和場地定案。'],
+  ['2027/01/24 前','場地','製作桌次表（含主桌）','確認每桌賓客名單與座位安排。'],
+  ['2027/01/24 前','喜餅','確認最終喜餅數量與配送時間','避開春節物流停運期間，確認配送日期與收件人。'],
+  ['2027/01/24 前','廠商','確認所有廠商窗口聯絡表已備妥','確保婚禮當天能聯繫到主持、新秘、婚攝婚錄、婚佈等所有廠商。'],
+  ['2027/01/24 前','婚禮小物','確認送客小物到貨','年前到貨比較安心，也有時間包裝。'],
+  ['2027/01/24 前','素材','影片與照片輪播完稿','交給場地或婚錄測試播放，確認格式沒問題。'],
+  ['2027/02/04 前','廠商','與各廠商最終確認到場時間','春節連假期間不好聯繫，連假前就把當天時間表發給所有廠商。'],
+  ['2027/02/04 前','流程','流程定稿並發送給所有廠商','包含主持人、場地、婚攝婚錄、新秘、婚佈。'],
+  ['2027/02/04 前','道具','準備婚禮當天道具','戒指、戒枕、簽名簿、座位卡、遊戲道具與獎品等，可參考「婚禮流程」頁的道具清單。'],
+  ['2027/02/04 前','廠商尾款','準備尾款現金並分裝','依「廠商尾款」頁籤金額，連假前先領好現金並分裝信封。'],
+  ['2027/02/12 前','流程','場地勘查或彩排','確認接待處、進場動線與拍照位置。'],
+  ['2027/02/12 前','道具','道具與尾款交給總召','前一天整理好當天要帶的物品與尾款。'],
+  ['婚禮當天','流程','享受屬於你們的午後','剩下的交給總召與團隊。']
 ];
 
 (function(){
@@ -434,9 +488,14 @@ var DEFAULT_ITINERARY = [
   document.title = slashDate(CONFIG.date) + ' ' + namesLine + '・婚禮籌備手帖';
   document.getElementById('hGroom').textContent = CONFIG.groom;
   document.getElementById('hBride').textContent = CONFIG.bride;
-  document.getElementById('hEnNames').textContent = (CONFIG.groomEn && CONFIG.brideEn) ? (CONFIG.groomEn + ' & ' + CONFIG.brideEn) : '';
   document.getElementById('hDate').textContent = slashDate(CONFIG.date);
   document.getElementById('hVenue').textContent = CONFIG.venue;
+  if(CONFIG.venueAddress) document.getElementById('hVenue').title = CONFIG.venueAddress;
+  if(CONFIG.venueAddress){
+    var addr = document.createElement('span');
+    addr.textContent = '地址　' + CONFIG.venueAddress;
+    document.querySelector('.meta-line').appendChild(addr);
+  }
   document.getElementById('postmarkYear').textContent = CONFIG.date.slice(0,4);
   document.getElementById('photoCaption').textContent = (CONFIG.groomEn && CONFIG.brideEn) ? (CONFIG.groomEn + ' & ' + CONFIG.brideEn) : '';
   document.getElementById('printTitle').textContent = slashDate(CONFIG.date) + ' ' + namesLine + ' 婚禮當天流程';
@@ -533,7 +592,9 @@ var DEFAULT_ITINERARY = [
   }
 
   document.getElementById('refreshBtn').addEventListener('click', function(){ loadAll(false); });
+  var bulkBusy = false;
   setInterval(function(){
+    if(bulkBusy) return;
     var a = document.activeElement;
     var typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable);
     if(!typing) loadAll(true);
@@ -599,6 +660,33 @@ var DEFAULT_ITINERARY = [
     if(today >= ymd(addDays(new Date(due + 'T00:00:00'), -14))) return 'soon';
     return '';
   }
+
+  document.getElementById('replaceChecklistBtn').addEventListener('click', async function(){
+    if(!isConfigured || !loadedOnce){ alert('資料還在讀取中，請稍候再試。'); return; }
+    if(bulkBusy) return;
+    if(!confirm('這會刪除試算表中目前全部 ' + state.Checklist.length + ' 個檢核項目，換成 2/13 午宴版的 ' + CHECKLIST_TEMPLATE.length + ' 個新項目。確定要取代嗎？')) return;
+    bulkBusy = true;
+    var btn = this; btn.disabled = true;
+    var old = state.Checklist.slice();
+    var fresh = CHECKLIST_TEMPLATE.map(function(t, idx){
+      return {id:newId('c'), phase:t[0], category:t[1], text:t[2], done:false, desc:t[3], ref_link:'', file_link:'', order:idx+1};
+    });
+    state.Checklist = fresh;
+    renderChecklist(); updateProgress();
+    var total = old.length + fresh.length, n = 0, failed = 0;
+    for(var i=0;i<old.length;i++){
+      setSyncStatus('正在更新試算表… ' + (++n) + ' / ' + total + '（請勿關閉頁面）');
+      if(!(await postAction({action:'delete', sheet:'Checklist', id:old[i].id}))) failed++;
+    }
+    for(var j=0;j<fresh.length;j++){
+      var it = fresh[j];
+      setSyncStatus('正在更新試算表… ' + (++n) + ' / ' + total + '（請勿關閉頁面）');
+      if(!(await postAction({action:'add', sheet:'Checklist', fields:{id:it.id, phase:it.phase, category:it.category, text:it.text, done:'FALSE', desc:it.desc, ref_link:'', file_link:'', order:it.order}}))) failed++;
+    }
+    bulkBusy = false; btn.disabled = false;
+    if(failed){ setSyncStatus('⚠️ 有 ' + failed + ' 筆沒有同步成功，請點「重新整理」確認試算表內容。', true); }
+    else { await loadAll(false); }
+  });
 
   function updateProgress(){
     var total = state.Checklist.length;
@@ -799,7 +887,7 @@ var DEFAULT_ITINERARY = [
     var rows = DEFAULT_ITINERARY.map(function(d, idx){
       return {id:newId('i'), time:'', end_time:'', outline:d.outline, summary:d.summary, music:d.music, screen:d.screen, props:d.props, note:d.note, order:base+idx+1};
     });
-    rows.forEach(function(r){ state.Itinerary.push(r); });
+    rows.forEach(function(r, idx){ r.time = DEFAULT_ITINERARY[idx].time || ''; r.end_time = DEFAULT_ITINERARY[idx].end_time || ''; state.Itinerary.push(r); });
     renderItin(); renderPropsChecklist();
     for(var i=0;i<rows.length;i++){ await postAction({action:'add', sheet:'Itinerary', fields:itinFields(rows[i])}); }
     seeding = false;
@@ -1031,7 +1119,7 @@ var DEFAULT_ITINERARY = [
 
   var passInput = document.getElementById('paymentsPasscode');
   function tryUnlockPayments(){
-    if(passInput.value === CONFIG.paymentsPasscode){
+    if(passInput.value.trim().toLowerCase() === String(CONFIG.paymentsPasscode).toLowerCase()){
       paymentsUnlocked = true;
       renderPayments();
       document.getElementById('paymentsGate').style.display = 'none';
