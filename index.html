@@ -164,6 +164,21 @@
   .phase-count{font-family:'Special Elite',monospace; font-size:.82rem; color:var(--olive);}
   .task-row{display:flex; align-items:center; gap:10px; padding:10px 20px; border-top:1px dashed var(--paper-deep); flex-wrap:wrap;}
   .phase-head + .task-row{border-top:none;}
+  .phase-head-right{display:flex; align-items:center; gap:14px;}
+  .phase-date-edit{font-size:.74rem; color:var(--ink-soft); display:flex; align-items:center; gap:4px;}
+  .phase-date-edit input, .task-date{font-family:'Special Elite',monospace; font-size:.78rem; color:var(--ink); background:var(--paper); border:1px solid var(--line); padding:2px 6px;}
+  .task-date{flex:0 0 132px; width:132px; color:var(--rust-deep);}
+  .task-meta-row{padding-left:190px !important;}
+  @media (max-width:600px){ .task-meta-row{padding-left:48px !important;} }
+  .task-row.done .task-date{color:var(--ink-soft);}
+  .global-add{background:var(--card); border:1px dashed var(--rust); padding:16px 20px; margin-bottom:24px; box-shadow:3px 3px 0 var(--paper-deep);}
+  .global-add-title{font-weight:700; letter-spacing:.08em; color:var(--rust-deep); margin-bottom:10px;}
+  .global-add-row{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;}
+  .ga-field{display:flex; flex-direction:column; font-size:.72rem; color:var(--ink-soft); gap:3px;}
+  .ga-field input{padding:7px 10px; border:1px solid var(--line); background:var(--paper); font-size:.88rem;}
+  .ga-cat input{width:120px;}
+  .ga-text{flex:1 1 220px;}
+  .ga-hint{font-size:.74rem; color:var(--ink-soft); margin:8px 0 0;}
   .task-row input[type="checkbox"]{width:18px; height:18px; accent-color:var(--olive); flex:none; cursor:pointer;}
   .task-category{flex:0 0 90px; width:90px; font-size:.76rem; padding:3px 8px; border:1px solid var(--rust); background:none; color:var(--rust); text-align:center;}
   .task-text{flex:1 1 220px; min-width:140px; font-size:.92rem; border:none; background:none; padding:4px 2px;}
@@ -241,7 +256,17 @@
   .payment-badge{display:inline-block; font-size:.68rem; padding:1px 8px; margin-top:5px; margin-left:4px; border:1px solid currentColor;}
   .payment-badge.cash{color:var(--olive);} .payment-badge.card{color:var(--mustard);}
   .payment-badge.pending{color:var(--red);} .payment-badge.after{color:var(--ink-soft);}
-  @media (max-width:560px){ .payment-card{grid-template-columns:20px 1fr;} .payment-amount-block{grid-column:2/3; text-align:left;} }
+  .pay-edit{outline:none; padding:2px 4px; margin:0 -4px; border-radius:2px; min-height:1.4em; word-break:break-word;}
+  .pay-edit:hover{background:rgba(196,154,60,.08);}
+  .pay-edit:focus{background:var(--paper); box-shadow:inset 0 -1px 0 var(--rust);}
+  .pay-edit.empty::before{content:attr(data-placeholder); color:var(--ink-soft); opacity:.5; font-weight:400;}
+  .payment-note-edit{font-size:.76rem; color:var(--rust); margin-top:2px;}
+  .pay-edit.amt{display:inline-block; min-width:60px; margin:0; text-align:right;}
+  .pay-selects{display:flex; gap:6px; justify-content:flex-end; margin-top:6px; flex-wrap:wrap;}
+  .pay-select{font-family:inherit; font-size:.74rem; color:var(--ink); background:var(--paper); border:1px solid var(--line); padding:2px 4px;}
+  .pay-tools{display:flex; gap:12px; justify-content:flex-end; align-items:center; margin-top:8px; font-size:.74rem; color:var(--ink-soft);}
+  .pay-tools input{width:14px; height:14px; margin:0; vertical-align:-2px; accent-color:var(--red);}
+  @media (max-width:560px){ .payment-card{grid-template-columns:20px 1fr;} .payment-amount-block{grid-column:2/3; text-align:left;} .pay-selects,.pay-tools{justify-content:flex-start;} .pay-edit.amt{text-align:left;} }
 
   .save-note{font-size:.78rem; color:var(--ink-soft); margin-top:16px;}
   footer{padding:36px 0 46px; text-align:center; font-size:.78rem; color:var(--ink-soft); letter-spacing:.12em;}
@@ -357,9 +382,15 @@
       <span><span class="legend-dot" style="background:var(--soon);"></span>14 天內到期</span>
       <span><span class="legend-dot" style="background:var(--donebg);"></span>已完成</span>
     </div>
-    <div class="itin-export-row" style="margin:-4px 0 18px;">
-      <button id="replaceChecklistBtn">↺ 改用 2/13 午宴版時程</button>
-      <span class="itin-export-updated">會清除試算表中目前的檢核項目，換成依婚期與春節連假重排的新時程</span>
+    <div class="global-add">
+      <div class="global-add-title">＋ 新增事項</div>
+      <div class="global-add-row">
+        <label class="ga-field"><span>截止日期</span><input type="date" id="gaDate"></label>
+        <label class="ga-field ga-cat"><span>大類</span><input type="text" id="gaCat" placeholder="例如：禮服"></label>
+        <label class="ga-field ga-text"><span>事項</span><input type="text" id="gaText" placeholder="要做的事…"></label>
+        <button class="btn-ink" id="gaAddBtn">新增</button>
+      </div>
+      <p class="ga-hint">同一個日期的事項會自動放在一起；每個事項右側的日期也可以直接改，改完會移到對應的日期區塊。</p>
     </div>
     <div id="checklistContainer"></div>
     <p class="save-note">＊勾選與編輯會即時同步到 Google 試算表（約每 20 秒自動更新，也可以手動點「重新整理」）。</p>
@@ -460,7 +491,8 @@
         <div style="flex:1; min-width:200px;"><div class="ps-label">確認進度</div><div class="payments-progress-track"><div class="payments-progress-fill" id="paymentsProgressFill" style="width:0%;"></div></div></div>
       </div>
       <div id="paymentsCardList"></div>
-      <p class="save-note">＊打勾代表已與該廠商確認尾款金額與付款方式，狀態會即時同步到 Google 試算表。</p>
+      <div class="add-row" style="border-top:none; padding-left:0;"><button class="btn-ink" id="addPaymentBtn">＋ 新增尾款項目</button></div>
+      <p class="save-note">＊點任何文字或金額即可直接修改，付款方式與時間可用下拉選單切換；打勾代表已與該廠商確認尾款金額與付款方式。所有變更都會即時同步到 Google 試算表。</p>
     </div>
   </section>
 
@@ -663,7 +695,7 @@ var CHECKLIST_TEMPLATE = [
   setInterval(function(){
     if(bulkBusy) return;
     var a = document.activeElement;
-    var typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable);
+    var typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable);
     if(!typing) loadAll(true);
   }, 20000);
 
@@ -728,7 +760,8 @@ var CHECKLIST_TEMPLATE = [
     return '';
   }
 
-  document.getElementById('replaceChecklistBtn').addEventListener('click', async function(){
+  var _rcb = document.getElementById('replaceChecklistBtn');
+  if(_rcb) _rcb.addEventListener('click', async function(){
     if(!isConfigured || !loadedOnce){ alert('資料還在讀取中，請稍候再試。'); return; }
     if(bulkBusy) return;
     if(!confirm('這會刪除試算表中目前全部 ' + state.Checklist.length + ' 個檢核項目，換成 2/13 午宴版的 ' + CHECKLIST_TEMPLATE.length + ' 個新項目。確定要取代嗎？')) return;
@@ -775,14 +808,52 @@ var CHECKLIST_TEMPLATE = [
         return d !== 0 ? d : (a.category||'').localeCompare(b.category||'', 'zh-Hant');
       });
     });
-    var list = order.map(function(p){ return {phase:p, items:groups[p]}; });
+    var list = order.map(function(p, idx){ return {phase:p, items:groups[p], due:getPhaseDueDate(p), idx:idx}; });
     list.sort(function(a,b){
       var ad = a.items.length && a.items.every(function(i){ return i.done; });
       var bd = b.items.length && b.items.every(function(i){ return i.done; });
-      return ad === bd ? 0 : (ad ? 1 : -1);
+      if(ad !== bd) return ad ? 1 : -1;
+      if(a.due && b.due && a.due !== b.due) return a.due < b.due ? -1 : 1;
+      if(!!a.due !== !!b.due) return a.due ? -1 : 1;
+      return a.idx - b.idx;
     });
     return list;
   }
+
+  // 依日期產生階段名稱：婚禮當天 → 「YYYY/MM/DD 婚禮當天」，其他 → 「YYYY/MM/DD 前」
+  function phaseForDate(d){
+    if(!d) return '';
+    return slashDate(d) + (d === CONFIG.date ? ' 婚禮當天' : ' 前');
+  }
+  function setItemPhase(item, newPhase){
+    if(!newPhase || newPhase === item.phase) return;
+    item.phase = newPhase;
+    postAction({action:'update', sheet:'Checklist', id:item.id, fields:{phase:newPhase}});
+  }
+  function addChecklistItem(phase, category, text){
+    var maxOrder = state.Checklist.reduce(function(m,i){ return Math.max(m,i.order); }, 0);
+    var it = {id:newId('c'), phase:phase, category:category, text:text, done:false, desc:'', ref_link:'', file_link:'', order:maxOrder+1};
+    state.Checklist.push(it);
+    renderChecklist(); updateProgress();
+    postAction({action:'add', sheet:'Checklist', fields:{id:it.id, phase:it.phase, category:it.category, text:it.text, done:'FALSE', desc:'', ref_link:'', file_link:'', order:it.order}});
+    return it;
+  }
+
+  (function(){
+    var gaDate = document.getElementById('gaDate'), gaCat = document.getElementById('gaCat'), gaText = document.getElementById('gaText');
+    gaDate.value = ymd(addDays(new Date(), 14));
+    gaDate.max = CONFIG.date;
+    function go(){
+      var t = gaText.value.trim();
+      if(!t){ gaText.focus(); return; }
+      if(!gaDate.value){ gaDate.focus(); return; }
+      addChecklistItem(phaseForDate(gaDate.value), gaCat.value.trim(), t);
+      gaText.value = ''; gaCat.value = '';
+      setSyncStatus('已新增：' + t);
+    }
+    document.getElementById('gaAddBtn').addEventListener('click', go);
+    gaText.addEventListener('keydown', function(e){ if(e.key === 'Enter') go(); });
+  })();
 
   var linkEditorOpen = {}, descEditorOpenMap = {};
 
@@ -796,8 +867,26 @@ var CHECKLIST_TEMPLATE = [
       head.className = 'phase-head';
       var doneCount = group.items.filter(function(i){ return i.done; }).length;
       var due = getPhaseDueDate(group.phase);
-      var dueLabel = due ? '　<span class="phase-due">' + slashDate(due) + '　' + formatRelative(due) + '</span>' : '';
-      head.innerHTML = '<span class="phase-title">' + esc(group.phase) + dueLabel + '</span><span class="phase-count">' + doneCount + ' / ' + group.items.length + '</span>';
+      var dueLabel = due ? '　<span class="phase-due">' + formatRelative(due) + '</span>' : '';
+      head.innerHTML = '<span class="phase-title">' + esc(group.phase) + dueLabel + '</span>';
+      var headRight = document.createElement('span');
+      headRight.className = 'phase-head-right';
+      var gLab = document.createElement('label');
+      gLab.className = 'phase-date-edit'; gLab.title = '一次修改這個區塊所有事項的日期';
+      gLab.appendChild(document.createTextNode('整組改到 '));
+      var gDate = document.createElement('input');
+      gDate.type = 'date'; gDate.value = due || '';
+      gDate.addEventListener('change', function(){
+        if(!gDate.value) return;
+        var np = phaseForDate(gDate.value);
+        group.items.forEach(function(it){ setItemPhase(it, np); });
+        renderChecklist();
+      });
+      gLab.appendChild(gDate);
+      var cnt = document.createElement('span');
+      cnt.className = 'phase-count'; cnt.textContent = doneCount + ' / ' + group.items.length;
+      headRight.appendChild(gLab); headRight.appendChild(cnt);
+      head.appendChild(headRight);
       block.appendChild(head);
 
       group.items.forEach(function(item){
@@ -830,7 +919,15 @@ var CHECKLIST_TEMPLATE = [
           renderChecklist(); updateProgress();
           postAction({action:'delete', sheet:'Checklist', id:item.id});
         });
-        row.appendChild(cb); row.appendChild(cat); row.appendChild(txt); row.appendChild(del);
+        var dt = document.createElement('input');
+        dt.type = 'date'; dt.className = 'task-date'; dt.title = '修改這個事項的截止日期';
+        dt.value = getPhaseDueDate(item.phase) || '';
+        dt.addEventListener('change', function(){
+          if(!dt.value) return;
+          setItemPhase(item, phaseForDate(dt.value));
+          renderChecklist();
+        });
+        row.appendChild(cb); row.appendChild(dt); row.appendChild(cat); row.appendChild(txt); row.appendChild(del);
 
         var meta = document.createElement('div');
         meta.className = 'task-meta-row' + (status ? ' status-' + status : '');
@@ -904,11 +1001,7 @@ var CHECKLIST_TEMPLATE = [
       abtn.addEventListener('click', function(){
         var val = ai.value.trim();
         if(!val) return;
-        var maxOrder = state.Checklist.reduce(function(m,i){ return Math.max(m,i.order); }, 0);
-        var it = {id:newId('c'), phase:group.phase, category:ac.value.trim(), text:val, done:false, desc:'', ref_link:'', file_link:'', order:maxOrder+1};
-        state.Checklist.push(it);
-        renderChecklist(); updateProgress();
-        postAction({action:'add', sheet:'Checklist', fields:{id:it.id, phase:it.phase, category:it.category, text:it.text, done:'FALSE', desc:'', ref_link:'', file_link:'', order:it.order}});
+        addChecklistItem(group.phase, ac.value.trim(), val);
       });
       ai.addEventListener('keydown', function(e){ if(e.key === 'Enter') abtn.click(); });
       addRow.appendChild(ac); addRow.appendChild(ai); addRow.appendChild(abtn);
@@ -1161,28 +1254,133 @@ var CHECKLIST_TEMPLATE = [
       var card = document.createElement('div');
       card.className = 'payment-card' + (p.flag ? ' flagged' : '') + (p.confirmed ? ' confirmed' : '');
       var cb = document.createElement('input');
-      cb.type = 'checkbox'; cb.checked = p.confirmed;
+      cb.type = 'checkbox'; cb.checked = p.confirmed; cb.title = '已確認尾款金額與付款方式';
       cb.addEventListener('change', function(){
         p.confirmed = cb.checked; renderPayments();
         postAction({action:'update', sheet:'Payments', id:p.id, fields:{confirmed: p.confirmed ? 'TRUE' : 'FALSE'}});
       });
+
       var mid = document.createElement('div');
-      mid.innerHTML = '<div class="payment-name">' + esc(p.name) + '</div>' +
-        (p.role ? '<div class="payment-role">' + esc(p.role) + '</div>' : '') +
-        (p.contact ? '<div class="payment-contact">' + esc(p.contact).replace(/\|/g,'　') + '</div>' : '') +
-        (p.note ? '<div class="payment-note">' + esc(p.note) + '</div>' : '');
+      mid.appendChild(payCell(p, 'name', 'payment-name', '項目名稱（例如：婚禮攝影）'));
+      mid.appendChild(payCell(p, 'role', 'payment-role', '廠商名稱'));
+      mid.appendChild(payCell(p, 'contact', 'payment-contact', '聯絡電話'));
+      mid.appendChild(payCell(p, 'note', 'payment-note-edit', '備註（例如：金額待確認）'));
+
       var right = document.createElement('div');
       right.className = 'payment-amount-block';
+      var amtWrap = document.createElement('div');
+      amtWrap.className = 'payment-amount';
+      var prefix = document.createElement('span'); prefix.textContent = 'NT$ ';
+      var amtCell = document.createElement('span');
+      amtCell.className = 'pay-edit amt'; amtCell.contentEditable = 'true';
       var amt = parseAmount(p.amount);
-      var payCls = p.pay_method === 'card' ? 'card' : 'cash';
-      var whenCls = p.when === 'pending' ? 'pending' : (p.when === 'after' ? 'after' : 'cash');
-      right.innerHTML = '<div class="payment-amount">' + (amt !== null && p.amount ? 'NT$ ' + amt.toLocaleString('en-US') : '－') + '</div><div>' +
-        (p.pay_label ? '<span class="payment-badge ' + payCls + '">' + esc(p.pay_label) + '</span>' : '') +
-        (p.when_label ? '<span class="payment-badge ' + whenCls + '">' + esc(p.when_label) + '</span>' : '') + '</div>';
+      amtCell.textContent = (amt !== null && p.amount !== '') ? amt.toLocaleString('en-US') : '';
+      amtCell.dataset.placeholder = '金額';
+      if(!amtCell.textContent) amtCell.classList.add('empty');
+      amtCell.addEventListener('focus', function(){ amtCell.classList.remove('empty'); });
+      amtCell.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); amtCell.blur(); } });
+      amtCell.addEventListener('blur', function(){
+        var n = parseAmount(amtCell.textContent);
+        var newVal = n === null ? '' : String(n);
+        if(newVal !== String(parseAmount(p.amount) === null ? '' : parseAmount(p.amount))){
+          p.amount = newVal;
+          postAction({action:'update', sheet:'Payments', id:p.id, fields:{amount:newVal}});
+        }
+        renderPayments();
+      });
+      amtWrap.appendChild(prefix); amtWrap.appendChild(amtCell);
+      right.appendChild(amtWrap);
+
+      var selRow = document.createElement('div');
+      selRow.className = 'pay-selects';
+      selRow.appendChild(paySelect(p, 'pay_method', 'pay_label', PAY_METHODS));
+      selRow.appendChild(paySelect(p, 'when', 'when_label', PAY_WHENS));
+      right.appendChild(selRow);
+
+      var tools = document.createElement('div');
+      tools.className = 'pay-tools';
+      var flagLab = document.createElement('label');
+      var flagCb = document.createElement('input');
+      flagCb.type = 'checkbox'; flagCb.checked = p.flag;
+      flagCb.addEventListener('change', function(){
+        p.flag = flagCb.checked; renderPayments();
+        postAction({action:'update', sheet:'Payments', id:p.id, fields:{flag: p.flag ? 'TRUE' : 'FALSE'}});
+      });
+      flagLab.appendChild(flagCb); flagLab.appendChild(document.createTextNode(' 需留意'));
+      var del = document.createElement('button');
+      del.className = 'vendor-del'; del.textContent = '刪除';
+      del.addEventListener('click', function(){
+        state.Payments = state.Payments.filter(function(x){ return x.id !== p.id; });
+        renderPayments();
+        postAction({action:'delete', sheet:'Payments', id:p.id});
+      });
+      tools.appendChild(flagLab); tools.appendChild(del);
+      right.appendChild(tools);
+
       card.appendChild(cb); card.appendChild(mid); card.appendChild(right);
       list.appendChild(card);
     });
   }
+
+  var PAY_METHODS = [['cash','現金'],['card','刷卡'],['transfer','轉帳']];
+  var PAY_WHENS = [['onsite','當天現場支付'],['after','婚宴後支付'],['pending','待確認']];
+  var PAY_SHEET_COL = {contact:'Contact'};
+
+  function payCell(p, field, cls, placeholder){
+    var el = document.createElement('div');
+    el.className = 'pay-edit ' + cls; el.contentEditable = 'true';
+    el.textContent = p[field] || '';
+    el.dataset.placeholder = placeholder;
+    if(!p[field]) el.classList.add('empty');
+    el.addEventListener('focus', function(){ el.classList.remove('empty'); });
+    el.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); el.blur(); } });
+    el.addEventListener('blur', function(){
+      var val = el.textContent.trim();
+      if(!val) el.classList.add('empty');
+      if(val === (p[field] || '')) return;
+      p[field] = val;
+      var f = {}; f[PAY_SHEET_COL[field] || field] = val;
+      postAction({action:'update', sheet:'Payments', id:p.id, fields:f});
+    });
+    return el;
+  }
+
+  function paySelect(p, valField, labelField, options){
+    var sel = document.createElement('select');
+    sel.className = 'pay-select';
+    var blank = document.createElement('option'); blank.value = ''; blank.textContent = '—';
+    sel.appendChild(blank);
+    var known = false;
+    options.forEach(function(o){
+      var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1];
+      if(o[0] === p[valField]) known = true;
+      sel.appendChild(op);
+    });
+    if(p[valField] && !known){
+      var extra = document.createElement('option'); extra.value = p[valField]; extra.textContent = p[labelField] || p[valField];
+      sel.appendChild(extra);
+    }
+    sel.value = p[valField] || '';
+    sel.addEventListener('change', function(){
+      var label = '';
+      options.forEach(function(o){ if(o[0] === sel.value) label = o[1]; });
+      p[valField] = sel.value; p[labelField] = label;
+      var f = {}; f[valField] = sel.value; f[labelField] = label;
+      postAction({action:'update', sheet:'Payments', id:p.id, fields:f});
+      sel.blur();
+    });
+    return sel;
+  }
+
+  document.getElementById('addPaymentBtn').addEventListener('click', function(){
+    var maxOrder = state.Payments.reduce(function(m,x){ return Math.max(m, x.order); }, 0);
+    var p = {id:newId('p'), name:'', role:'', amount:'', pay_method:'cash', pay_label:'現金', when:'onsite', when_label:'當天現場支付', contact:'', note:'', flag:false, confirmed:false, order:maxOrder+1};
+    state.Payments.push(p);
+    renderPayments();
+    postAction({action:'add', sheet:'Payments', fields:{id:p.id, name:'', role:'', amount:'', pay_method:p.pay_method, pay_label:p.pay_label, when:p.when, when_label:p.when_label, Contact:'', note:'', flag:'FALSE', confirmed:'FALSE', order:p.order}});
+    var names = document.querySelectorAll('#paymentsCardList .payment-name');
+    if(names.length) names[names.length-1].focus();
+  });
 
   var passInput = document.getElementById('paymentsPasscode');
   function tryUnlockPayments(){
